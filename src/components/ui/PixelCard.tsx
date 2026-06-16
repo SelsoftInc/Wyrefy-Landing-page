@@ -275,7 +275,6 @@ export default function PixelCard({ variant = 'default', gap, speed, colors, noF
           position: relative;
           overflow: hidden;
           display: flex;
-          isolation: isolate;
         }
 
         .pixel-card::before {

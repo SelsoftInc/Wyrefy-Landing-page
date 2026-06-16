@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactLenis } from "lenis/react";
+import "lenis/dist/lenis.css";
 
 export function SmoothScroll({ 
   children, 
@@ -14,7 +15,7 @@ export function SmoothScroll({
   id?: string;
 }) {
   return (
-    <ReactLenis root={root} options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }} className={className} id={id}>
+    <ReactLenis root={root} options={{ autoRaf: true, lerp: 0.1 }} className={className} id={id}>
       {children}
     </ReactLenis>
   );

@@ -39,7 +39,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`h-full antialiased scroll-smooth ${inter.variable} ${outfit.variable} ${spaceGrotesk.variable}`}
+      className={`min-h-full antialiased ${inter.variable} ${outfit.variable} ${spaceGrotesk.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: `
@@ -50,7 +50,7 @@ export default function RootLayout({
           } catch {}
         ` }} />
       </head>
-      <body className="min-h-full overflow-x-hidden">
+      <body className="min-h-full overflow-x-clip">
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

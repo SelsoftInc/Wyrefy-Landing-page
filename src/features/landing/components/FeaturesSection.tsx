@@ -19,25 +19,25 @@ const features = [
     title: "Lightning Fast Sandboxes",
     description: "Launch fully isolated, secure development environments in milliseconds. Zero local setup or configuration required.",
     icon: <Zap size={22} className="text-blue-600" />,
-    image: "/Features/Card1.png"
+    image: "/Features/sandbox_glass.png"
   },
   {
     title: "Context-Aware AI Generation",
     description: "Import your Figma designs instantly and let our AI build, edit, and refactor production-grade code that perfectly matches your specs.",
     icon: <Sparkles size={22} className="text-blue-600" />,
-    image: "/Features/Card2.png"
+    image: "/Features/ai_core_glass.png"
   },
   {
     title: "Chat-Driven Iteration",
     description: "Direct the entire development process naturally. Just ask for changes in the chat and watch the interface update in real-time.",
     icon: <MessageSquareText size={22} className="text-blue-600" />,
-    image: "/Features/Card3.png"
+    image: "/Features/chat_bubbles_glass.png"
   },
   {
     title: "Live Interactive Previews",
     description: "See your changes immediately. Our secure proxy infrastructure ensures your preview is perfectly synced with every agent edit.",
     icon: <MonitorPlay size={22} className="text-blue-600" />,
-    image: "/Features/Card4.png"
+    image: "/Features/ui_panels_glass.png"
   }
 ];
 
@@ -59,11 +59,11 @@ export function FeaturesSection() {
   const imgXLeft = useTransform(scrollYProgress, [0, 1], [-100, 100]);
 
   return (
-    <section ref={containerRef} className="bg-[#f8fafc] py-32 px-5 relative z-10 overflow-visible" id="features">
-      {/* Dynamic Wavy Glowing Background */}
-      <div className="absolute top-1/2 left-0 w-full h-[800px] -translate-y-1/2 pointer-events-none overflow-hidden opacity-60">
-        <div className="absolute top-1/2 left-[-10%] w-[120%] h-[800px] bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.08),transparent_60%)] transform -translate-y-1/2 -rotate-12"></div>
-        <div className="absolute top-[40%] left-[-10%] w-[120%] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.06),transparent_60%)] transform -translate-y-1/2 rotate-6"></div>
+    <section ref={containerRef} className="bg-transparent py-32 px-5 relative z-10 overflow-visible" id="features">
+      {/* Dynamic Glowing Background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-50">
+        <div className="absolute top-1/4 left-[-10%] w-[50vw] h-[50vw] bg-cyan-300/20 rounded-full blur-[100px]" />
+        <div className="absolute bottom-1/4 right-[-10%] w-[60vw] h-[60vw] bg-blue-300/20 rounded-full blur-[100px]" />
       </div>
 
       {/* Floating 3D Image Parallax - Top Right */}
@@ -104,13 +104,12 @@ export function FeaturesSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false }}
         >
-          <div className="inline-flex items-center px-4 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/5 mb-6">
-            <span className="text-xs font-semibold text-blue-600 uppercase tracking-widest">Workspace Foundations</span>
+          <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-blue-50/80 backdrop-blur-md shadow-[0_8px_30px_rgba(59,130,246,0.1)] border border-blue-200/50 mb-6">
+            <span className="text-[11px] font-bold text-blue-600 uppercase tracking-widest">Workspace Foundations</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-6">
-            Built around the way
-            <br />
-            Wyrefy projects move.
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.1] text-white drop-shadow-sm">
+            Intelligent features for<br />
+            <span className="text-white/80">autonomous development.</span>
           </h2>
         </motion.div>
 
@@ -127,30 +126,30 @@ export function FeaturesSection() {
             >
               <CardSpotlight
                 radius={400}
-                color="rgba(59, 130, 246, 0.1)"
-                className="h-full relative rounded-2xl bg-gradient-to-br from-white to-blue-50/50 border border-blue-100 overflow-hidden group hover:border-blue-300 transition-all duration-500 shadow-[0_8px_32px_rgba(59,130,246,0.06)] hover:shadow-[0_8px_32px_rgba(59,130,246,0.12)] hover:-translate-y-1 hover:scale-[1.01]"
+                color="rgba(255, 255, 255, 0.4)"
+                className="h-full relative rounded-2xl md:rounded-[32px] bg-white/60 backdrop-blur-[40px] border-[1.5px] border-white/80 overflow-hidden shadow-[0_20px_80px_-20px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.5)]"
               >
                 {/* Background Image Element with Gradient Mask */}
                 <div 
-                  className={`absolute z-0 pointer-events-none transition-transform duration-700 ease-out group-hover:scale-105 opacity-60 ${
+                  className={`absolute z-0 pointer-events-none mix-blend-multiply opacity-90 ${
                     idx === 0 || idx === 3 
                       ? "top-0 right-0 h-full w-[60%] md:w-[50%]" 
-                      : "bottom-0 left-0 w-full h-[45%]"
+                      : "bottom-0 left-0 w-full h-[55%]"
                   }`}
                   style={{
                     WebkitMaskImage: idx === 0 || idx === 3 
-                      ? "linear-gradient(to right, transparent, black 40%)" 
-                      : "linear-gradient(to bottom, transparent, black 70%)",
+                      ? "linear-gradient(to right, transparent, black 30%)" 
+                      : "linear-gradient(to bottom, transparent, black 40%)",
                     maskImage: idx === 0 || idx === 3 
-                      ? "linear-gradient(to right, transparent, black 40%)" 
-                      : "linear-gradient(to bottom, transparent, black 70%)"
+                      ? "linear-gradient(to right, transparent, black 30%)" 
+                      : "linear-gradient(to bottom, transparent, black 40%)"
                   }}
                 >
                   <Image 
                     src={feature.image} 
                     alt={feature.title} 
                     fill
-                    className={idx === 0 || idx === 3 ? "object-cover object-left" : "object-cover object-top"} 
+                    className={idx === 0 || idx === 3 ? "object-contain object-right" : "object-contain object-bottom"} 
                     unoptimized
                   />
                 </div>
@@ -159,12 +158,12 @@ export function FeaturesSection() {
                   <div className="flex-1 flex flex-col">
                     {/* Top Label & Waves */}
                     <div>
-                      <WavyLines className="w-16 h-4 text-blue-500/10" />
+                      <WavyLines className="w-16 h-4 text-blue-500/20" />
                     </div>
 
                     {/* Content */}
                     <h3 className={`font-medium text-slate-800 mt-6 mb-4 ${idx === 0 || idx === 3 ? "text-3xl" : "text-2xl"}`}>{feature.title}</h3>
-                    <p className={`text-slate-650 leading-relaxed flex-1 ${idx === 0 || idx === 3 ? "text-base mb-6 max-w-[90%]" : "text-sm mb-12"}`}>
+                    <p className={`text-slate-600 leading-relaxed flex-1 ${idx === 0 || idx === 3 ? "text-base mb-6 max-w-[90%]" : "text-sm mb-12"}`}>
                       {feature.description}
                     </p>
                   </div>
@@ -172,9 +171,9 @@ export function FeaturesSection() {
                   {/* Bottom Graphic & Icon */}
                   <div className={`flex items-end ${idx === 0 || idx === 3 ? "justify-start items-center md:items-end w-full md:w-auto" : "justify-between mt-auto pt-8"}`}>
                     {idx !== 0 && idx !== 3 && (
-                      <WavyLines className="w-32 h-6 text-blue-500/10" />
+                      <WavyLines className="w-32 h-6 text-slate-300/40" />
                     )}
-                    <div className={`rounded-xl border border-blue-200/50 flex items-center justify-center bg-blue-50 shadow-[inset_0_0_15px_rgba(59,130,246,0.1)] group-hover:bg-blue-100/50 transition-all duration-500 group-hover:scale-110 backdrop-blur-sm ${idx === 0 || idx === 3 ? "w-16 h-16 shrink-0 mt-4 md:mt-0" : "w-12 h-12"}`}>
+                    <div className={`rounded-full bg-white shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/50 flex items-center justify-center ${idx === 0 || idx === 3 ? "w-16 h-16 shrink-0 mt-4 md:mt-0" : "w-12 h-12"}`}>
                       {feature.icon}
                     </div>
                   </div>

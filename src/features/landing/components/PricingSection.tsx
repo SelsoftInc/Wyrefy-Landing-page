@@ -4,14 +4,25 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import Image from "next/image";
 import PixelCard from "@/src/components/ui/PixelCard";
-import type { Plan } from "@/src/features/auth/types";
-
+export interface Plan {
+  id: string;
+  name: string;
+  slug: string;
+  tenant_type: "individual" | "organization";
+  price_cents: number | null;
+  billing_interval: string;
+  included_credits?: string | number;
+  limits_json: { projects?: string | number; credits?: string | number };
+  status: string;
+  is_public: boolean;
+  organization_id: string | null;
+}
 type PricingSectionProps = Readonly<{
-  plans: Plan[];
+  plans?: Plan[];
   onSelectPlan: (slug: string) => void;
 }>;
 
-export function PricingSection({ plans, onSelectPlan }: PricingSectionProps) {
+export function PricingSection({ plans = [], onSelectPlan }: PricingSectionProps) {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -37,50 +48,78 @@ export function PricingSection({ plans, onSelectPlan }: PricingSectionProps) {
     organization_id: null,
   };
 
-  const displayPlans = [...plans, enterprisePlan];
+  const defaultPlans: Plan[] = [
+    {
+      id: "starter-plan",
+      name: "Starter",
+      slug: "starter",
+      tenant_type: "individual",
+      price_cents: 0,
+      billing_interval: "month",
+      included_credits: "0.5",
+      limits_json: { projects: 1, credits: 0.5 },
+      status: "active",
+      is_public: true,
+      organization_id: null,
+    },
+    {
+      id: "pro-plan",
+      name: "Pro",
+      slug: "pro",
+      tenant_type: "individual",
+      price_cents: 2900,
+      billing_interval: "month",
+      included_credits: "100",
+      limits_json: { projects: 5, credits: 100 },
+      status: "active",
+      is_public: true,
+      organization_id: null,
+    }
+  ];
+
+  const actualPlans = plans.length > 0 ? plans : defaultPlans;
+  const displayPlans = [...actualPlans, enterprisePlan];
 
   return (
     <>
       <style>{`
         .plan-card {
-          border-radius: 20px;
+          border-radius: 32px;
           padding: 32px;
           display: flex;
           flex-direction: column;
-          transition: all 0.25s;
+          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
           position: relative;
           overflow: hidden;
-          background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-          border: 1px solid rgba(59, 130, 246, 0.15);
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02), inset 0 1px 0 rgba(255,255,255,0.8);
+          background: rgba(255, 255, 255, 0.6);
+          backdrop-filter: blur(40px);
+          -webkit-backdrop-filter: blur(40px);
+          border: 1.5px solid rgba(255, 255, 255, 0.8);
+          box-shadow: 0 20px 80px -20px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
         }
         .plan-card:hover {
-          transform: translateY(-8px) scale(1.02);
-          border-color: rgba(59, 130, 246, 0.35);
-          box-shadow: 0 30px 60px -12px rgba(59, 130, 246, 0.08), 0 0 30px rgba(59, 130, 246, 0.03);
+          transform: scale(1.04) translateY(-6px);
+          border-color: rgba(14, 165, 233, 0.4);
+          background: rgba(255, 255, 255, 0.7);
+          box-shadow: 0 30px 100px -20px rgba(59, 130, 246, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+          z-index: 20;
         }
         .plan-card.featured {
-          background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%);
-          border: 1px solid rgba(82, 39, 255, 0.3);
-          transform: scale(1.03);
-          box-shadow: 0 0 40px rgba(82, 39, 255, 0.05), inset 0 1px 0 rgba(255,255,255,0.8);
+          background: rgba(255, 255, 255, 0.8);
+          border: 1.5px solid rgba(255, 255, 255, 1);
+          box-shadow: 0 30px 100px -20px rgba(59, 130, 246, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
         }
         .plan-card.featured:hover {
-          transform: scale(1.05) translateY(-8px);
-          border-color: rgba(82, 39, 255, 0.6);
-          box-shadow: 0 30px 60px -12px rgba(82, 39, 255, 0.12), 0 0 40px rgba(82, 39, 255, 0.12);
+          background: rgba(255, 255, 255, 0.9);
+          border-color: rgba(59, 130, 246, 0.5);
+          box-shadow: 0 40px 120px -25px rgba(59, 130, 246, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.7);
         }
         .plan-card::before {
           content: "";
           position: absolute;
           top: 0; left: 0; right: 0;
           height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
-          opacity: 0;
-          transition: opacity 0.3s;
-        }
-        .plan-card:hover::before {
-          opacity: 1;
+          background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.4), transparent);
         }
       `}</style>
 
@@ -104,20 +143,18 @@ export function PricingSection({ plans, onSelectPlan }: PricingSectionProps) {
         <div className="max-w-[1160px] mx-auto pt-24 pb-48 px-10 relative" id="pricing">
 
           <div className="text-center mb-[100px] relative z-10">
-          <div className="inline-flex items-center gap-[7px] text-[10px] font-bold tracking-[0.12em] uppercase text-slate-500 mb-4 py-1.5 px-3 border border-slate-200 rounded-full mx-auto">
-            <span className="text-[#5227FF]">Pricing</span>
+          <div className="inline-flex items-center gap-[7px] text-[11px] font-bold tracking-[0.12em] uppercase text-blue-600 mb-4 py-1.5 px-4 border border-blue-200/50 bg-blue-50/80 backdrop-blur-md shadow-[0_8px_30px_rgba(59,130,246,0.1)] rounded-full mx-auto">
+            <span>Pricing</span>
           </div>
-          <h2 className="text-[clamp(30px,3.8vw,52px)] font-bold text-slate-900 leading-[1.07] tracking-[-0.025em] mb-3 mx-auto">
+          <h2 className="text-[clamp(30px,3.8vw,52px)] font-bold text-white drop-shadow-sm leading-[1.07] tracking-[-0.025em] mb-3 mx-auto">
             Choose your plan
           </h2>
-          <p
-            className="text-slate-650 text-center mx-auto max-w-[420px]"
-          >
-            Transparent pricing that scales with your projects.
+          <p className="text-[clamp(16px,1.5vw,20px)] text-white/80 drop-shadow-sm max-w-[600px] mx-auto leading-relaxed">
+            Flexible pricing options to scale your AI development workspace.
           </p>
         </div>
         <div className="relative z-10">
-          <div className="absolute top-1/2 left-1/2 w-[800px] h-[500px] -translate-x-1/2 -translate-y-1/2 blur-[80px] -z-10 pointer-events-none rounded-full bg-[radial-gradient(circle,rgba(82,39,255,0.06)_0%,rgba(180,151,207,0.02)_50%,transparent_70%)]"></div>
+          <div className="absolute top-1/2 left-1/2 w-[800px] h-[500px] -translate-x-1/2 -translate-y-1/2 blur-[80px] -z-10 pointer-events-none rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.1)_0%,rgba(59,130,246,0.05)_50%,transparent_70%)]"></div>
           <div className="flex flex-col md:flex-row flex-wrap justify-center gap-4 items-stretch max-w-[960px] mx-auto">
           {displayPlans.map((plan) => {
             const isFeatured =
@@ -143,7 +180,7 @@ export function PricingSection({ plans, onSelectPlan }: PricingSectionProps) {
                 className={`plan-card w-full md:w-[300px] ${isFeatured ? "featured" : ""}`}
               >
                 <div className="relative z-10 w-full flex flex-col h-full pointer-events-none">
-                  {isFeatured && <div className="absolute top-0 left-1/2 -translate-x-1/2 text-[9px] font-bold tracking-[0.1em] uppercase py-1 px-3.5 bg-[#5227FF] text-white rounded-b-lg pointer-events-auto">Most popular</div>}
+                  {isFeatured && <div className="absolute top-0 left-1/2 -translate-x-1/2 text-[9px] font-bold tracking-[0.1em] uppercase py-1 px-3.5 bg-blue-500 text-white rounded-b-lg pointer-events-auto">Most popular</div>}
                   <div className="text-[13px] font-semibold text-slate-500 mb-2 mt-4 pointer-events-auto">{plan.name}</div>
                 {plan.price_cents !== null && plan.price_cents !== undefined ? (
                   <div className="text-5xl font-extrabold tracking-[-0.04em] text-slate-900 leading-none">
@@ -251,10 +288,10 @@ export function PricingSection({ plans, onSelectPlan }: PricingSectionProps) {
                 <button
                   type="button"
                   onClick={() => onSelectPlan(plan.slug)}
-                  className={`w-full py-[11px] rounded-[9px] text-[13px] font-semibold cursor-pointer transition-all duration-300 pointer-events-auto ${
+                  className={`w-full py-[11px] rounded-[9px] text-[13px] font-semibold cursor-pointer transition-all duration-200 pointer-events-auto hover:shadow-[0_0_20px_rgba(59,130,246,0.6),0_0_40px_rgba(14,165,233,0.6),0_0_60px_rgba(2,132,199,0.4)] ${
                     isFeatured 
-                      ? "bg-[#5227FF] text-white border-none hover:bg-[#623eff] hover:shadow-[0_10px_20px_-5px_rgba(82,39,255,0.4)] hover:-translate-y-1" 
-                      : "bg-slate-100 text-slate-800 border border-slate-200 hover:bg-slate-200 hover:border-slate-300 hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.05)] hover:-translate-y-1"
+                      ? "bg-blue-500 text-white border-none hover:bg-blue-600 shadow-sm" 
+                      : "bg-white/60 text-slate-800 border border-slate-200 hover:bg-white/80 shadow-sm"
                   }`}
                 >
                   {isEnterprise ? "Contact us" : isFeatured ? "Choose Plan" : "Get started"}

@@ -16,13 +16,13 @@ export function BrandsSection() {
   const [hoveredTech, setHoveredTech] = useState<string | null>(null);
 
   return (
-    <section className="bg-black pt-32 pb-12 px-5 relative z-10 w-full overflow-hidden">
+    <section className="pt-24 pb-12 px-5 relative z-10 w-full overflow-hidden">
       <div className="max-w-[1200px] mx-auto flex flex-col items-center">
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: false }}
-          className="text-white/40 text-sm font-semibold mb-8 tracking-wide uppercase"
+          className="text-white/80 text-sm font-semibold mb-8 tracking-wide uppercase drop-shadow-sm"
         >
           Works with your favorite technologies
         </motion.p>
@@ -47,9 +47,8 @@ export function BrandsSection() {
                 }}
                 onHoverStart={() => setHoveredTech(tech.name)}
                 onHoverEnd={() => setHoveredTech(null)}
-                className={`flex items-center gap-3 cursor-pointer transition-all duration-200 ease-out ${
-                  isHovered ? "drop-shadow-[0_0_25px_rgba(255,255,255,0.4)]" : ""
-                } ${isOtherHovered ? "opacity-30 grayscale" : "opacity-100 grayscale-0"}`}
+                className={`flex items-center gap-3 cursor-pointer transition-all duration-200 ease-out ${isHovered ? "drop-shadow-[0_4px_15px_rgba(59,130,246,0.3)]" : ""
+                  } ${isOtherHovered ? "opacity-40 grayscale" : "opacity-100 grayscale-0"}`}
               >
                 <div className="shrink-0 flex items-center justify-center">
                   <Image
@@ -58,10 +57,10 @@ export function BrandsSection() {
                     aria-hidden="true"
                     width={26}
                     height={26}
-                    className={`size-6 object-contain ${tech.name === "Next.js" ? "invert" : ""}`}
+                    className={`size-6 object-contain brightness-0 invert`}
                   />
                 </div>
-                <span className="text-white font-bold text-xl tracking-tight">{tech.name}</span>
+                <span className="text-white drop-shadow-sm font-bold text-xl tracking-tight">{tech.name}</span>
               </motion.div>
             );
           })}
