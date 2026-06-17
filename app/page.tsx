@@ -1,20 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Navbar } from "@/src/features/landing/components/Navbar";
 import { HeroSection } from "@/src/features/landing/components/HeroSection";
-import { BrandsSection } from "@/src/features/landing/components/BrandsSection";
 import { FeaturesSection } from "@/src/features/landing/components/FeaturesSection";
-import { ProcessSection } from "@/src/features/landing/components/process/ProcessSection";
+import { UseCasesSection } from "@/src/features/landing/components/UseCasesSection";
 import { PricingSection } from "@/src/features/landing/components/PricingSection";
 import { Footer } from "@/src/features/landing/components/Footer";
 import { ScrollToTop } from "@/src/features/landing/components/ScrollToTop";
+import { AppLoading } from "@/src/components/ui/loading-states";
 
 export default function Home() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    queueMicrotask(() => setReady(true));
+    // Show the cool loading screen for 1.5 seconds on initial load
+    const timer = setTimeout(() => {
+      setReady(true);
+    }, 1500);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleAction = () => {
@@ -32,7 +35,7 @@ export default function Home() {
   }, [ready]);
 
   if (!ready) {
-    return <div className="min-h-screen" />;
+    return <AppLoading />;
   }
 
   function selectPlan(slug: string) {
@@ -44,7 +47,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen relative bg-transparent text-slate-800 antialiased">
+    <div className="min-h-screen relative bg-white text-slate-800 antialiased">
       <style>{`
         :root {
           --bg: var(--background);
@@ -93,17 +96,14 @@ export default function Home() {
         }
       `}</style>
 
-      <Navbar />
-
-      <main className="page-motion relative z-10">
+      <main className="page-motion relative z-10 bg-white">
         <HeroSection onAction={handleAction} />
-        <BrandsSection />
         <FeaturesSection />
-        <ProcessSection />
+        <UseCasesSection />
         <PricingSection onSelectPlan={selectPlan} />
+        <Footer />
       </main>
 
-      <Footer />
       <ScrollToTop />
     </div>
   );
