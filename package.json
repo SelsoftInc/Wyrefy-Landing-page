@@ -7,7 +7,6 @@
     "build": "bun --bun next build",
     "start": "bun --bun next start",
     "lint": "eslint",
-    "doctor": "react-doctor",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
@@ -35,7 +34,6 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "jsdom": "^29.1.1",
-    "react-doctor": "^0.2.9",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.7"

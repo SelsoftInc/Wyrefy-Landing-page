@@ -624,6 +624,7 @@ export function HeroSection({ onAction }: { onAction: () => void }) {
 
               {/* Static CTA Button (Without animation) */}
               <button
+                type="button"
                 onClick={onAction}
                 className="px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest bg-white text-slate-950 hover:bg-slate-100 transition-all shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
               >

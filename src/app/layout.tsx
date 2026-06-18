@@ -103,6 +103,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
       className={`min-h-full antialiased ${inter.variable} ${outfit.variable} ${spaceGrotesk.variable}`}
     >
@@ -110,6 +111,7 @@ export default function RootLayout({
         <Script
           id="theme-init"
           strategy="beforeInteractive"
+          // Safe use of dangerouslySetInnerHTML to initialize theme and prevent FOUC
           dangerouslySetInnerHTML={{ __html: `
             try {
               const stored = localStorage.getItem("wyrefy-theme") || "system";
