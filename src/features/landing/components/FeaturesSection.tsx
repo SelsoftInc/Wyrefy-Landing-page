@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "motion/react";
-import { useState, useRef, useEffect } from "react";
+import { LazyMotion, domAnimation, m as motion } from "motion/react";
+import { useState, useEffect } from "react";
 import { Zap, BrainCircuit, MessageSquare, MonitorPlay } from "lucide-react";
 import { BrandLogo } from "@/src/components/ui/brand-logo";
 
@@ -62,6 +62,7 @@ export function FeaturesSection() {
   }, [isHovered]);
 
   return (
+    <LazyMotion features={domAnimation}>
     <section className="w-full px-6 pt-16 pb-16 bg-slate-50 text-slate-800 overflow-hidden relative" id="features">
       
       {/* Background atmospheric glow */}
@@ -138,6 +139,8 @@ export function FeaturesSection() {
                         <div style={{ transform: "rotateX(-70deg)" }}>
                           {/* Interactive Planet Node */}
                           <button
+                            type="button"
+                            aria-label={`Select ${feature.title}`}
                             onMouseEnter={() => setActiveFeature(idx)}
                             className={`relative group flex flex-col items-center justify-center p-2 md:p-4 transition-transform duration-300 ${
                               activeFeature === idx ? 'scale-125' : 'scale-100 hover:scale-110'
@@ -195,9 +198,11 @@ export function FeaturesSection() {
 
             {/* Pagination / HUD Nav Tracker */}
             <div className="mt-12 flex gap-4">
-              {FEATURES.map((_, i) => (
-                <div 
-                  key={i} 
+              {FEATURES.map((feature, i) => (
+                <button 
+                  key={feature.id} 
+                  type="button"
+                  aria-label={`Go to feature ${i + 1}`}
                   onClick={() => setActiveFeature(i)}
                   className={`h-[4px] rounded-full overflow-hidden cursor-pointer transition-all duration-500 ease-out ${activeFeature === i ? 'w-16 bg-slate-300' : 'w-8 bg-slate-200 hover:bg-slate-300'}`}
                 >
@@ -209,7 +214,7 @@ export function FeaturesSection() {
                       transition={{ duration: isHovered ? 0 : 4, ease: "linear" }}
                     />
                   )}
-                </div>
+                </button>
               ))}
             </div>
 
@@ -218,5 +223,6 @@ export function FeaturesSection() {
         </div>
       </div>
     </section>
+    </LazyMotion>
   );
 }

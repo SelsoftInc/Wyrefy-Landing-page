@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { FolderPlus, UploadCloud, Bot, MonitorPlay } from "lucide-react";
-import { motion, AnimatePresence, useMotionValue, useAnimationFrame, useScroll, useVelocity } from "motion/react";
+import { LazyMotion, domAnimation, m as motion } from "motion/react";
 
 /* ─────────────── Tech stack data ─────────────── */
 const techStack = [
@@ -181,17 +181,19 @@ function FlowCard({
         </h3>
 
         {/* Description – fades in when active, height expands in sync */}
-        <p
-          className="text-[10px] xl:text-[11px] font-semibold text-slate-500 leading-relaxed"
+        <div
+          className="grid transition-all"
           style={{
-            opacity:    active ? 1 : 0,
-            maxHeight:  active ? "120px" : "0px",
-            overflow:   "hidden",
-            transition: "opacity 0.35s, max-height 0.4s cubic-bezier(0.34,1.56,0.64,1)",
+            opacity: active ? 1 : 0,
+            gridTemplateRows: active ? "1fr" : "0fr",
+            transitionDuration: "0.4s",
+            transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
-          {step.desc}
-        </p>
+          <p className="text-[10px] xl:text-[11px] font-semibold text-slate-500 leading-relaxed overflow-hidden">
+            {step.desc}
+          </p>
+        </div>
       </div>
     </motion.div>
   );
@@ -200,20 +202,27 @@ function FlowCard({
 /* ─────────────── Main component ─────────────── */
 export function UseCasesSection() {
   const [activeStep,  setActiveStep]  = useState<number>(0);
-  const [hoveredStep, setHoveredStep] = useState<number | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  /* Auto-cycle unless hovered */
+  const startInterval = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => setActiveStep(p => (p + 1) % 4), 2500);
+  };
+
+  /* Auto-cycle */
   useEffect(() => {
-    if (hoveredStep !== null) { setActiveStep(hoveredStep); return; }
-    const id = setInterval(() => setActiveStep(p => (p + 1) % 4), 2500);
-    return () => clearInterval(id);
-  }, [hoveredStep]);
+    intervalRef.current = setInterval(() => setActiveStep(p => (p + 1) % 4), 2500);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, []);
 
   /* Rebuild paths every render so p3 stays attached when card 03 expands */
   const { paths, anchors } = buildPaths(activeStep);
   const pathActive = PATH_ACTIVE_MAP.map(fn => fn(activeStep));
 
   return (
+    <LazyMotion features={domAnimation}>
     <>
       <style>{`
         @keyframes dash-flow {
@@ -325,8 +334,13 @@ export function UseCasesSection() {
                 <FlowCard
                   key={step.num} step={step} cidx={idx}
                   active={activeStep === idx}
-                  onEnter={() => setHoveredStep(idx)}
-                  onLeave={() => setHoveredStep(null)}
+                  onEnter={() => {
+                    if (intervalRef.current) clearInterval(intervalRef.current);
+                    setActiveStep(idx);
+                  }}
+                  onLeave={() => {
+                    startInterval();
+                  }}
                   delay={idx * 0.1}
                 />
               ))}
@@ -357,8 +371,8 @@ export function UseCasesSection() {
                       className="flex flex-col transition-transform duration-500" 
                       style={{ transform: `translateY(-${activeStep * 25}%)` }}
                     >
-                      {steps.map((s, i) => (
-                        <span key={i} className="text-[10px] text-slate-400 font-mono truncate h-6 flex items-center max-w-[200px] xl:max-w-[300px]">
+                      {steps.map((s) => (
+                        <span key={s.num} className="text-[10px] text-slate-400 font-mono truncate h-6 flex items-center max-w-[200px] xl:max-w-[300px]">
                           wyrefy.io · {s.num} {s.title}
                         </span>
                       ))}
@@ -377,12 +391,13 @@ export function UseCasesSection() {
                     animate={{ x: `-${activeStep * 25}%` }}
                     transition={{ type: "spring", damping: 30, stiffness: 200 }}
                   >
-                    {steps.map((step, idx) => (
-                      <div key={idx} className="relative w-1/4 h-full">
+                    {steps.map((step) => (
+                      <div key={step.num} className="relative w-1/4 h-full">
                         <Image
                           src={step.imageSrc}
                           alt={step.title}
                           fill
+                          sizes="(max-width: 768px) 100vw, 50vw"
                           className="object-cover object-top"
                           unoptimized
                         />
@@ -420,5 +435,6 @@ export function UseCasesSection() {
         </div>
       </section>
     </>
+    </LazyMotion>
   );
 }

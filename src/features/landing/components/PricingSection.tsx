@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, ShieldCheck } from "lucide-react";
-import { motion } from "motion/react";
+import { LazyMotion, domAnimation, m as motion } from "motion/react";
 
 interface Plan {
   name: string;
@@ -12,25 +12,27 @@ interface Plan {
   isFeatured?: boolean;
 }
 
+const PLANS: Plan[] = [
+  {
+    name: "Enterprise",
+    slug: "enterprise",
+    price: "Custom",
+    desc: "For organizations that need custom limits, support, and billing.",
+    isFeatured: true,
+    features: [
+      "Unlimited projects workspace",
+      "Custom credit allocation",
+      "Live frontend preview access",
+      "Organization-ready workspace",
+      "Custom support & billing terms"
+    ]
+  }
+];
+
 export function PricingSection({ onSelectPlan }: { onSelectPlan: (slug: string) => void }) {
-  const plans: Plan[] = [
-    {
-      name: "Enterprise",
-      slug: "enterprise",
-      price: "Custom",
-      desc: "For organizations that need custom limits, support, and billing.",
-      isFeatured: true,
-      features: [
-        "Unlimited projects workspace",
-        "Custom credit allocation",
-        "Live frontend preview access",
-        "Organization-ready workspace",
-        "Custom support & billing terms"
-      ]
-    }
-  ];
 
   return (
+    <LazyMotion features={domAnimation}>
     <section className="w-full px-6 py-20 bg-white text-slate-800 min-h-screen flex flex-col justify-center" id="pricing">
       <div className="w-full max-w-[1400px] mx-auto">
         <div className="text-center mb-16 max-w-2xl mx-auto">
@@ -47,7 +49,7 @@ export function PricingSection({ onSelectPlan }: { onSelectPlan: (slug: string) 
         </div>
 
         <div className="grid grid-cols-1 gap-8 max-w-md mx-auto items-stretch">
-          {plans.map((plan, idx) => (
+          {PLANS.map((plan, idx) => (
             <motion.div
               key={plan.name}
               initial={{ opacity: 0, y: 30, scale: plan.isFeatured ? 1.03 : 1 }}
@@ -130,5 +132,6 @@ export function PricingSection({ onSelectPlan }: { onSelectPlan: (slug: string) 
         </div>
       </div>
     </section>
+    </LazyMotion>
   );
 }

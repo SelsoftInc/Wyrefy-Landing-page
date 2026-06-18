@@ -30,10 +30,10 @@ export function Footer() {
             </p>
 
             <div className="flex gap-4 mt-2">
-              <a href="#" className="text-slate-400 hover:text-[#6836E1] hover:-translate-y-1 hover:scale-110 transition-all duration-300 inline-block">
+              <a href="https://x.com/Selsoftx" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="text-slate-400 hover:text-[#6836E1] hover:-translate-y-1 hover:scale-110 transition-all duration-300 inline-block">
                 <XIcon className="size-5" />
               </a>
-              <a href="#" className="text-slate-400 hover:text-[#6836E1] hover:-translate-y-1 hover:scale-110 transition-all duration-300 inline-block">
+              <a href="https://www.linkedin.com/company/selsoft-inc-/posts/?feedView=all" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-slate-400 hover:text-[#6836E1] hover:-translate-y-1 hover:scale-110 transition-all duration-300 inline-block">
                 <LinkedinIcon className="size-5" />
               </a>
             </div>
@@ -67,7 +67,7 @@ export function Footer() {
 
         {/* Lower Row: Attribution and copyright */}
         <div className="border-t border-slate-300 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-semibold text-slate-400 tracking-wider">
-          <p>© {new Date().getFullYear()} Selsoft Inc. All rights reserved.</p>
+          <p suppressHydrationWarning>© {new Date().getFullYear()} Selsoft Inc. All rights reserved.</p>
           
           <div className="flex items-center gap-3">
             <span>A PRODUCT OF</span>

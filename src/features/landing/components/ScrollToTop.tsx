@@ -3,6 +3,31 @@
 import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
 
+const scrollToTop = () => {
+  const startY = window.scrollY;
+  const duration = 800; // ms
+  const startTime = performance.now();
+
+  const easeInOutCubic = (t: number) => {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  };
+
+  const animateScroll = (currentTime: number) => {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    
+    const easeProgress = easeInOutCubic(progress);
+    
+    window.scrollTo(0, startY * (1 - easeProgress));
+
+    if (progress < 1) {
+      requestAnimationFrame(animateScroll);
+    }
+  };
+
+  requestAnimationFrame(animateScroll);
+};
+
 export function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -15,33 +40,10 @@ export function ScrollToTop() {
     }
   };
 
-  const scrollToTop = () => {
-    const startY = window.scrollY;
-    const duration = 800; // ms
-    const startTime = performance.now();
 
-    const easeInOutCubic = (t: number) => {
-      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    };
-
-    const animateScroll = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      
-      const easeProgress = easeInOutCubic(progress);
-      
-      window.scrollTo(0, startY * (1 - easeProgress));
-
-      if (progress < 1) {
-        requestAnimationFrame(animateScroll);
-      }
-    };
-
-    requestAnimationFrame(animateScroll);
-  };
 
   useEffect(() => {
-    window.addEventListener("scroll", toggleVisibility);
+    window.addEventListener("scroll", toggleVisibility, { passive: true });
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 

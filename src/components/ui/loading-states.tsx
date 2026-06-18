@@ -2,12 +2,13 @@
 
 import { AlertTriangle, LockKeyhole, RotateCcw } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { LazyMotion, domAnimation, m as motion } from "motion/react";
 
 import { BrandLogo } from "@/src/components/ui/brand-logo";
 
 export function AppLoading({ label = "Loading Wyrefy" }: Readonly<{ label?: string }>) {
   return (
+    <LazyMotion features={domAnimation}>
     <main className="relative flex min-h-screen flex-col items-center justify-center px-6 bg-[#FAF9FD] overflow-hidden select-none">
       {/* Background animated gradient glow */}
       <motion.div 
@@ -74,58 +75,7 @@ export function AppLoading({ label = "Loading Wyrefy" }: Readonly<{ label?: stri
 
       </div>
     </main>
-  );
-}
-
-export function SectionLoading({ label = "Loading" }: Readonly<{ label?: string }>) {
-  return (
-    <div className="relative flex h-full w-full min-h-[60vh] flex-1 flex-col items-center justify-center p-6 select-none bg-transparent">
-      <div className="relative z-10 flex flex-col items-center gap-6">
-        
-        {/* Core floating logo */}
-        <div className="relative flex items-center justify-center w-20 h-20">
-          <motion.div 
-            animate={{ rotate: 360 }}
-            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-0 rounded-full border border-dashed border-[#6836E1]/30"
-          />
-          <motion.div 
-            animate={{ scale: [1, 1.05, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="relative z-10 bg-white p-3 rounded-2xl shadow-lg border border-slate-100 flex items-center justify-center"
-          >
-            <BrandLogo className="size-8 text-[#6836E1]" />
-          </motion.div>
-        </div>
-        
-        <div className="flex flex-col items-center gap-3 text-center">
-          <motion.span 
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="text-xs font-bold tracking-widest text-[#6836E1] uppercase"
-          >
-            {label}
-          </motion.span>
-          <div className="relative h-1 w-24 overflow-hidden rounded-full bg-slate-200/60 shadow-inner">
-            <motion.div 
-              animate={{ x: ["-100%", "100%"] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-0 bottom-0 left-0 w-1/2 rounded-full bg-gradient-to-r from-transparent via-[#6836E1] to-transparent"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export function SkeletonRows({ rows = 3 }: Readonly<{ rows?: number }>) {
-  return (
-    <div className="grid gap-3">
-      {Array.from({ length: rows }, (_, row) => `skeleton-row-${row + 1}`).map((rowKey) => (
-        <div key={rowKey} className="loading-shimmer h-14 rounded-2xl border border-[var(--border)]" />
-      ))}
-    </div>
+    </LazyMotion>
   );
 }
 type AccessStateProps = Readonly<{

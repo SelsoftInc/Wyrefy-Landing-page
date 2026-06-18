@@ -11,24 +11,24 @@ type ThemeState = {
 
 const storageKey = "wyrefy-theme";
 
-function applyTheme(theme: ThemePreference) {
+function applyTheme() {
   const root = document.documentElement;
   // Force light theme permanently as requested
   root.dataset.theme = "light";
 }
 
-export const useThemeStore = create<ThemeState>((set) => ({
+const useThemeStore = create<ThemeState>((set) => ({
   theme: "light",
-  setTheme: (theme) => {
+  setTheme: () => {
     localStorage.setItem(storageKey, "light");
-    applyTheme("light");
+    applyTheme();
     set({ theme: "light" });
   },
 }));
 
 export function initializeTheme() {
   useThemeStore.setState({ theme: "light" });
-  applyTheme("light");
+  applyTheme();
   
   // Return an empty cleanup function since we no longer listen to system theme changes
   return () => {};

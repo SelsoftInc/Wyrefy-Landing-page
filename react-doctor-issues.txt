@@ -1,0 +1,330 @@
+React Doctor v0.5.6
+
+  
+
+  ⚠ Bugs: Array index used as a key ×3
+    Learn more: https://react.doctor/docs/rules/react-doctor/no-array-index-as-key
+    Your users can see & submit the wrong data when this list
+    reorders or filters, so use a stable id like
+    `key={item.id}`, not the array index "i".
+    → Use a stable id from the item, like `key={item.id}` or
+    `key={item.slug}`. Index keys break when the list reorders
+    or filters.
+
+    src/features/landing/components/FeaturesSection.tsx:200
+
+    src/features/landing/components/UseCasesSection.tsx:361
+
+    src/features/landing/components/UseCasesSection.tsx:381
+
+  ⚠ Bugs: Time or random value in JSX
+    Learn more: https://react.doctor/docs/rules/react-doctor/rendering-hydration-mismatch-time
+    This can cause a hydration mismatch because new Date()
+    reached from JSX gives a different value on the server than
+    in the browser. Move it into useEffect+useState to run only
+    in the browser, or add suppressHydrationWarning to the
+    parent if it's on purpose.
+    → Move time or random values into useEffect+useState so
+    they only run in the browser, or add
+    suppressHydrationWarning to the parent if it's intentional
+
+    src/features/landing/components/Footer.tsx:70
+
+  ⚠ Security: Raw HTML injection can run unsafe markup
+    Learn more: https://react.doctor/docs/rules/react-doctor/no-danger
+    `dangerouslySetInnerHTML` is an XSS hole that runs
+    attacker-controlled HTML in your users' browsers.
+    → Render trusted content as React children so
+    attacker-controlled HTML cannot run in users' browsers.
+
+    src/app/layout.tsx:86
+
+  ⚠ Performance: Non-passive scroll listener
+    Learn more: https://react.doctor/docs/rules/react-doctor/client-passive-event-listeners
+    "scroll" listener without { passive: true } makes scrolling
+    janky for your users. Only add it if the handler doesn't
+    call event.preventDefault(), since passive listeners
+    silently ignore preventDefault().
+    → Add `{ passive: true }` as the third argument:
+    `addEventListener('scroll', handler, { passive: true })`.
+    Only do this if the handler doesn't call
+    `event.preventDefault()`, since passive listeners ignore it
+    (which breaks pull-to-refresh, custom gestures, and nested
+    scrolling).
+
+    src/features/landing/components/ScrollToTop.tsx:44
+
+  ⚠ Accessibility: Control missing accessible label
+    Learn more: https://react.doctor/docs/rules/react-doctor/control-has-associated-label
+    Blind users can't tell what this control does because
+    screen readers find no label, so add visible text,
+    `aria-label`, or `aria-labelledby`.
+    → Give every interactive control a label screen readers can
+    read.
+
+    src/features/landing/components/FeaturesSection.tsx:140
+
+  ⚠ Accessibility: Anchor used as a button ×2
+    Learn more: https://react.doctor/docs/rules/react-doctor/anchor-is-valid
+    Keyboard users can't reach this link because its `href`
+    goes nowhere (`#`, `javascript:`, or empty), so point it at
+    a real destination.
+    → Give links a real destination. Use `<button>` for in-page
+    actions.
+
+    src/features/landing/components/Footer.tsx:33-36
+
+  ⚠ Bugs: next/image fill image is missing sizes
+    Learn more: https://react.doctor/docs/rules/react-doctor/nextjs-image-missing-sizes
+    next/image uses fill without sizes, so your users download
+    the largest image.
+    → Add `sizes` matching your layout so `next/image` does not
+    assume the largest candidate and make users download
+    oversized images.
+
+    src/features/landing/components/UseCasesSection.tsx:382
+
+  ⚠ Performance: Full Framer Motion import ×6
+    Learn more: https://react.doctor/docs/rules/react-doctor/use-lazy-motion
+    Importing "motion" ships about 30 kb of extra code and
+    slows page load. Use "m" with LazyMotion instead.
+    → Use `import { LazyMotion, m } from "framer-motion"` with
+    `domAnimation` features. Saves about 30kb.
+
+    src/features/landing/components/Navbar.tsx:7
+
+    src/components/ui/loading-states.tsx:5
+
+    src/features/landing/components/HeroSection.tsx:8
+
+    src/features/landing/components/FeaturesSection.tsx:3
+
+    src/features/landing/components/UseCasesSection.tsx:6
+
+    src/features/landing/components/PricingSection.tsx:4
+
+  ⚠ Accessibility: Interaction on static element
+    Learn more: https://react.doctor/docs/rules/react-doctor/no-static-element-interactions
+    Screen reader users can't tell this click handler is
+    interactive because it has no `role`, so add a `role` or
+    use a button or link.
+    → Give clickable static elements a `role`, or use a button
+    or link.
+
+    src/features/landing/components/FeaturesSection.tsx:199
+
+  ⚠ Maintainability: deslop/unused-file ×7
+    Unused file is not reachable from any entry point, so it
+    adds maintenance surface without shipping any code.
+    → Delete the file if it is truly unreachable, or import it
+    from an entry point.
+
+    public/theme-script.js
+
+    src/components/ui/button.tsx
+
+    src/lib/api-client.ts
+
+    src/lib/api-config.ts
+
+    src/lib/form-data.ts
+
+    src/lib/formatters.ts
+
+    src/lib/query-keys.ts
+
+  ⚠ Bugs: Button missing explicit type ×2
+    Learn more: https://react.doctor/docs/rules/react-doctor/button-has-type
+    Your users can submit the form by accident because a
+    `<button>` with no `type` defaults to submit.
+    → Set an explicit button `type` so plain buttons do not
+    submit forms by accident: `type="button"`, `"submit"`, or
+    `"reset"`.
+
+    src/features/landing/components/HeroSection.tsx:626
+
+    src/features/landing/components/FeaturesSection.tsx:140
+
+  ⚠ Performance: State only used in handlers
+    Learn more: https://react.doctor/docs/rules/react-doctor/rerender-state-only-in-handlers
+    Each update to "hoveredStep" redraws your component for
+    nothing because this useState is set but never shown on
+    screen.
+    → Use useRef instead of useState when the value is only set
+    and never shown on screen. `ref.current = ...` updates it
+    without redrawing the component.
+
+    src/features/landing/components/UseCasesSection.tsx:203
+
+  ⚠ Performance: Animating layout properties
+    Learn more: https://react.doctor/docs/rules/react-doctor/no-layout-transition-inline
+    Your users see janky, stuttering animation because
+    "max-height" relayouts the page every frame, so animate
+    transform & opacity instead.
+    → Animate `transform` and `opacity` instead, since they're
+    cheap for the browser. For height, animate
+    `grid-template-rows` from `0fr` to `1fr`.
+
+    src/features/landing/components/UseCasesSection.tsx:190
+
+  ⚠ Accessibility: Click handler missing keyboard handler
+    Learn more: https://react.doctor/docs/rules/react-doctor/click-events-have-key-events
+    Keyboard users can't trigger this click handler because
+    there's no keyboard one, so add `onKeyUp`, `onKeyDown`, or
+    `onKeyPress`.
+    → Pair `onClick` with a key handler so keyboard users can
+    trigger it.
+
+    src/features/landing/components/FeaturesSection.tsx:199
+
+  ⚠ Maintainability: Static value rebuilt every render ×3
+    Learn more: https://react.doctor/docs/rules/react-doctor/prefer-module-scope-static-value
+    `navItems` inside `Navbar` uses no local state but is
+    rebuilt every render, so it looks new each time & breaks
+    memoized children. Move it to the top of the file, outside
+    the component.
+    → Move the value above the component, at the top of the
+    file. It doesn't use local state, so rebuilding it each
+    update is wasted and makes it look new every time.
+
+    src/features/landing/components/Navbar.tsx:12
+
+    src/components/ui/button.tsx:21
+
+    src/features/landing/components/PricingSection.tsx:16
+
+  ⚠ Maintainability: deslop/unused-export ×8
+    Unused export: `FigmaIcon` is exported but no module
+    imports it, so it expands the public surface and can
+    mislead callers about supported API.
+    → Drop the `export` keyword (or remove the declaration) if
+    no other module uses this symbol.
+
+    src/components/ui/brand-icons.tsx:3
+
+    src/components/ui/brand-icons.tsx:15
+
+    src/components/ui/brand-icons.tsx:31
+
+    src/components/ui/brand-icons.tsx:39
+
+    src/components/ui/loading-states.tsx:80
+
+    src/components/ui/loading-states.tsx:122
+
+    src/components/ui/toast.tsx:97
+
+    src/features/theme/store.ts:20
+
+  ⚠ Bugs: Plain script can block Next.js rendering
+    Learn more: https://react.doctor/docs/rules/react-doctor/nextjs-no-native-script
+    Plain <script> has no Next.js loading strategy, so it can
+    block rendering.
+    → Use `next/script` with `strategy="afterInteractive"` or
+    `"lazyOnload"` so third-party scripts do not block
+    rendering.
+
+    src/app/layout.tsx:86
+
+  ⚠ Accessibility: Gray text on colored background ×2
+    Learn more: https://react.doctor/docs/rules/react-doctor/no-gray-on-colored-background
+    Your users see washed-out gray text (text-slate-500) on a
+    colored background (bg-indigo-50), so use white or a darker
+    shade of the background color.
+    → Use white or near-white text, or a darker shade of the
+    background color. Gray text on colored backgrounds looks
+    washed out.
+
+    src/app/contact/page.tsx:36
+
+    src/app/contact/page.tsx:48
+
+  ⚠ Maintainability: Pure function rebuilt every render ×3
+    Learn more: https://react.doctor/docs/rules/react-doctor/prefer-module-scope-pure-function
+    `scrollToTop` inside `ScrollToTop` uses no local state but
+    is rebuilt on every render, so it wastes work & breaks
+    memoized children. Move it to the top of the file, outside
+    the component.
+    → Move the function above the component, at the top of the
+    file. It doesn't use local state, so rebuilding it each
+    update is wasted work.
+
+    src/features/landing/components/ScrollToTop.tsx:18
+
+    src/app/page.tsx:23
+
+    src/app/page.tsx:45
+
+  ⚠ Maintainability: Large component is hard to read and change
+    Learn more: https://react.doctor/docs/rules/react-doctor/no-giant-component
+    Component "HeroSection" is 643 lines long, which is hard to
+    read & change. Split it into a few smaller components.
+    → Pull each section into its own component so the parent is
+    easier to read, test, and change.
+
+    src/features/landing/components/HeroSection.tsx:30
+
+  ⚠ Maintainability: deslop/unused-dependency ×9
+    Unused dependency: `@monaco-editor/react`
+    Unused dependency: `@sonar/scan`
+    Unused dependency: `@streamdown/code`
+    Unused dependency: `gsap`
+    Unused dependency: `monaco-editor`
+    Unused dependency: `ogl`
+    Unused dependency: `react-markdown`
+    Unused dependency: `three`
+    Unused dependency: `zod`
+    → An unused dependency adds install time and supply-chain
+    surface without being used; remove it from package.json if
+    it is genuinely unused.
+
+  ⚠ Performance: Bouncy easing animation
+    Learn more: https://react.doctor/docs/rules/react-doctor/no-inline-bounce-easing
+    This bouncy easing can feel distracting. Use ease-out or
+    cubic-bezier(0.16, 1, 0.3, 1) for a smoother finish.
+    → Use `cubic-bezier(0.16, 1, 0.3, 1)` (ease-out-expo) for a
+    natural finish. Real objects don't bounce.
+
+    src/features/landing/components/UseCasesSection.tsx:190
+
+  ⚠ Security: react-doctor/no-vulnerable-react-server-components
+    next@16.2.4 bundles a React Server Components runtime
+    affected by a high-severity denial-of-service vulnerability
+    (CVE-2026-23870) patched in Next.js 16.2.6
+    → Upgrade Next.js to 16.2.6 (or newer). Next.js bundles its
+    own React Server Components runtime, so bumping Next.js
+    ships the fix. Run `npm install next@16.2.6`. See
+    https://vercel.com/changelog/next-js-may-2026-security-release
+
+    package.json
+
+
+  ────────────────────────────────────────────────────────────
+
+  All 58 issues
+
+  Security › 2 warnings
+  Bugs › 8 warnings
+  Performance › 10 warnings
+  Accessibility › 7 warnings
+  Maintainability › 31 warnings
+
+  ┌─────┐  51 / 100 Critical
+  │ • • │  ██████████████████████████░░░░░░░░░░░░░░░░░░░░░░░░
+  │  ─  │  React Doctor (https://react.doctor)
+  └─────┘
+
+  Full diagnostics written to /var/folders/ky/991lfmt949jdw58yd__r617m0000gn/T/react-doctor-9727006f-1ec3-47a8-a08f-57126724f680
+
+  ────────────────────────────────────────────────────────────
+
+  Share: https://react.doctor/share?p=client&s=51&w=58&f=22
+  Tell others how you did on socials
+
+  Docs: https://react.doctor/docs
+  Learn more about fixing issues, setting up CI/CD, and
+  configuring rules with a config file
+
+  GitHub: https://github.com/millionco/react-doctor
+  Report issues and star the repository!
+

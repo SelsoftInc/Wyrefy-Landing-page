@@ -1,8 +1,11 @@
 import { Navbar, Footer } from "@/src/features/landing/components";
 
 export const metadata = {
-  title: "Terms & Conditions | Wyrefy",
+  title: "Terms & Conditions",
   description: "Read the terms and conditions for using the Wyrefy platform safely, securely, and lawfully.",
+  alternates: {
+    canonical: "https://wyrefy.com/terms",
+  },
 };
 
 export default function TermsPage() {

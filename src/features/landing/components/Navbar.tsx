@@ -4,19 +4,20 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, LazyMotion, domAnimation, m as motion } from "motion/react";
+
+const NAV_ITEMS = [
+  { label: "Home", href: "/" },
+  { label: "Feature", href: "#features" },
+  { label: "Pricing", href: "#pricing" },
+  { label: "Contact", href: "/contact" },
+];
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const navItems = [
-    { label: "Home", href: "/" },
-    { label: "Feature", href: "#features" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "Contact", href: "/contact" },
-  ];
-
   return (
+    <LazyMotion features={domAnimation}>
     <>
       <nav className="w-full flex items-center py-4 select-none px-6 bg-white border-b border-slate-100 relative z-50">
         {/* Left Selsoft Logo */}
@@ -40,7 +41,7 @@ export function Navbar() {
 
         {/* Middle Navigation Links - Desktop Only */}
         <div className="hidden lg:flex items-center justify-center gap-8">
-          {navItems.map((item) => (
+          {NAV_ITEMS.map((item) => (
             <Link
               key={item.label}
               href={item.href}
@@ -91,7 +92,7 @@ export function Navbar() {
             className="lg:hidden absolute top-[73px] left-0 right-0 bg-white border-b border-slate-100 shadow-xl overflow-hidden z-40"
           >
             <div className="flex flex-col px-6 py-6 gap-6">
-              {navItems.map((item) => (
+              {NAV_ITEMS.map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}
@@ -123,5 +124,6 @@ export function Navbar() {
         )}
       </AnimatePresence>
     </>
+    </LazyMotion>
   );
 }

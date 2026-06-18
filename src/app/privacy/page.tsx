@@ -1,8 +1,11 @@
 import { Navbar, Footer } from "@/src/features/landing/components";
 
 export const metadata = {
-  title: "Privacy Policy | Wyrefy",
+  title: "Privacy Policy",
   description: "Read about how Wyrefy collects, processes, and protects your account and usage information securely.",
+  alternates: {
+    canonical: "https://wyrefy.com/privacy",
+  },
 };
 
 export default function PrivacyPage() {

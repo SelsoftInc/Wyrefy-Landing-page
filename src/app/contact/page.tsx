@@ -1,6 +1,14 @@
 import { Mail, MapPin, ChevronDown } from "lucide-react";
 import { Navbar, Footer } from "@/src/features/landing/components";
 
+export const metadata = {
+  title: "Contact Us",
+  description: "Get in touch with the Wyrefy team to learn more about our enterprise solutions.",
+  alternates: {
+    canonical: "https://wyrefy.com/contact",
+  },
+};
+
 export default function ContactPage() {
   return (
     <div className="min-h-screen relative bg-[#FAF9FD] text-slate-900 antialiased flex flex-col pt-32">
@@ -28,7 +36,7 @@ export default function ContactPage() {
 
               <div className="mt-12 space-y-8">
                 <div className="flex items-start gap-4 group cursor-pointer">
-                  <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border-2 border-slate-200 bg-white text-slate-500 shadow-sm transition-all duration-300 group-hover:border-[#6836E1]/30 group-hover:bg-indigo-50/50 group-hover:text-[#6836E1] group-hover:scale-110">
+                  <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border-2 border-slate-200 bg-white text-slate-700 shadow-sm transition-all duration-300 group-hover:border-[#6836E1]/30 group-hover:bg-indigo-50/50 group-hover:text-[#6836E1] group-hover:scale-110">
                     <Mail size={20} />
                   </div>
                   <div>
@@ -40,7 +48,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start gap-4 group cursor-pointer">
-                  <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border-2 border-slate-200 bg-white text-slate-500 shadow-sm transition-all duration-300 group-hover:border-[#6836E1]/30 group-hover:bg-indigo-50/50 group-hover:text-[#6836E1] group-hover:scale-110">
+                  <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border-2 border-slate-200 bg-white text-slate-700 shadow-sm transition-all duration-300 group-hover:border-[#6836E1]/30 group-hover:bg-indigo-50/50 group-hover:text-[#6836E1] group-hover:scale-110">
                     <MapPin size={20} />
                   </div>
                   <div>

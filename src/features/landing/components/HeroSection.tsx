@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
+
 import Image from "next/image";
 import { Navbar } from "./Navbar";
-import { Plus } from "lucide-react";
+
 import { useRef, useEffect } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 

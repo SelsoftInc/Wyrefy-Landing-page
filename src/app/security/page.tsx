@@ -1,8 +1,11 @@
 import { Navbar, Footer } from "@/src/features/landing/components";
 
 export const metadata = {
-  title: "Security | Wyrefy",
+  title: "Security",
   description: "Learn about how Wyrefy secures your data, sandboxes, and integrations.",
+  alternates: {
+    canonical: "https://wyrefy.com/security",
+  },
 };
 
 export default function SecurityPage() {
