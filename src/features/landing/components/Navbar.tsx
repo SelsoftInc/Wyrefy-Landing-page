@@ -1,122 +1,129 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
+import { AnimatePresence, LazyMotion, domAnimation, m as motion } from "motion/react";
 
-export function Navbar({
-  user,
-  onSignOut,
-}: {
-  user?: unknown;
-  onSignOut?: () => void;
-}) {
-  const pathname = usePathname();
-  const [activeSection, setActiveSection] = useState("home");
+const NAV_ITEMS = [
+  { label: "Home", href: "/" },
+  { label: "Feature", href: "#features" },
+  { label: "Pricing", href: "#pricing" },
+  { label: "Contact", href: "/contact" },
+];
 
-  useEffect(() => {
-    // If not on the homepage, the active section is the pathname without the slash
-    if (pathname !== "/") {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setActiveSection(pathname.replace("/", "") || "home");
-      return;
-    }
-
-    const handleScroll = () => {
-      const sections = ["hero", "features", "pricing"];
-      let current = "home";
-      
-      // Find the deepest section currently scrolled into view
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          // If the top of the section is near or above the middle of the screen
-          if (rect.top <= window.innerHeight / 2) {
-            current = section === "hero" ? "home" : section;
-          }
-        }
-      }
-      setActiveSection(current);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Check on mount
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [pathname]);
-
-  const navItems = [
-    { label: "Home", href: "/", id: "home" },
-    { label: "Feature", href: "/#features", id: "features" },
-    { label: "Pricing", href: "/#pricing", id: "pricing" },
-    { label: "Contact", href: "/contact", id: "contact" },
-  ];
+export function Navbar() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="fixed left-0 right-0 top-6 z-50 mx-auto px-6 md:px-10 w-full flex items-center justify-between pointer-events-none">
-      {/* Left: Logo */}
-      <div className="pointer-events-auto flex-1 flex justify-start">
-        <Link href="https://selsoftinc.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center transition-opacity hover:opacity-80 pl-3">
-          <Image src="/Selsoftinc.webp" alt="Selsoft Inc" width={140} height={48} className="h-10 w-auto object-contain" unoptimized />
-        </Link>
-      </div>
+    <LazyMotion features={domAnimation}>
+    <>
+      <nav className="w-full flex items-center py-4 select-none px-6 bg-white border-b border-slate-100 relative z-50">
+        {/* Left Selsoft Logo */}
+        <div className="flex-1 flex justify-start">
+          <Link 
+            href="https://selsoftinc.com" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="inline-flex items-center transition-opacity hover:opacity-80"
+          >
+            <Image 
+              src="/selsoftinc_black.png" 
+              alt="Selsoft Inc" 
+              width={170} 
+              height={50} 
+              className="h-10 md:h-12 w-auto object-contain" 
+              unoptimized
+            />
+          </Link>
+        </div>
 
-      {/* Center: Pill Navigation */}
-      <div className="pointer-events-auto hidden md:flex shrink-0 items-center p-1 rounded-full bg-white/80 border border-slate-200/80 backdrop-blur-md shadow-[0_8px_32px_rgba(59,130,246,0.08)]">
-        {navItems.map((item) => {
-          const isActive = activeSection === item.id;
-          return (
-            <Link 
-              key={item.id}
-              href={item.href} 
-              className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ease-in-out ${
-                isActive 
-                  ? "bg-blue-600/10 text-blue-600 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_2px_12px_rgba(37,99,235,0.15)]" 
-                  : "bg-transparent text-slate-600 hover:text-slate-950 hover:bg-slate-50"
-              }`}
+        {/* Middle Navigation Links - Desktop Only */}
+        <div className="hidden lg:flex items-center justify-center gap-8">
+          {NAV_ITEMS.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className="text-sm font-bold tracking-wide text-slate-500 hover:text-[#6836E1] hover:-translate-y-0.5 hover:scale-105 transition-all duration-300 inline-block"
             >
               {item.label}
             </Link>
-          );
-        })}
-      </div>
+          ))}
+        </div>
 
-      {/* Right: Actions */}
-      <div className="pointer-events-auto flex-1 flex justify-end items-center gap-4">
-        {user ? (
-          <>
-            <Link 
-              href="/dashboard" 
-              className="hidden text-sm font-medium text-white/80 transition-colors hover:text-white md:block"
-            >
-              Dashboard
-            </Link>
-            <button 
-              onClick={onSignOut}
-              className="ml-2 rounded-full bg-slate-100 border border-slate-200 px-5 py-2.5 text-sm font-medium text-slate-800 transition-all hover:bg-slate-200 shadow-sm cursor-pointer"
-            >
-              Sign Out
-            </button>
-          </>
-        ) : (
-          <>
-            <Link 
-              href="/login" 
-              className="hidden text-sm font-medium text-white/80 transition-colors hover:text-white md:block"
-            >
-              Login
-            </Link>
-            
-            <Link 
-              href="/contact" 
-              className="ml-2 rounded-full bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:bg-blue-700 shadow-md"
-            >
-              Book a Demo
-            </Link>
-          </>
+        {/* Right Login / Get Started - Desktop Only */}
+        <div className="hidden lg:flex flex-1 justify-end items-center gap-4">
+          <Link 
+            href="https://app.wyrefy.com/login" 
+            className="text-sm font-bold tracking-wide text-slate-500 hover:text-[#6836E1] hover:-translate-y-0.5 hover:scale-105 transition-all duration-300 inline-block"
+          >
+            Login
+          </Link>
+          <Link
+            href="https://app.wyrefy.com/signup"
+            className="px-6 py-2.5 rounded-full text-sm font-bold shadow-sm hover:-translate-y-0.5 hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-300 bg-slate-900 text-white hover:bg-[#6836E1]"
+          >
+            Book A Demo
+          </Link>
+        </div>
+
+        {/* Mobile Hamburger Icon */}
+        <div className="flex lg:hidden flex-1 justify-end">
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2 text-slate-600 hover:text-[#6836E1] transition-colors focus:outline-none"
+            aria-label="Toggle mobile menu"
+          >
+            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Dropdown */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="lg:hidden absolute top-[73px] left-0 right-0 bg-white border-b border-slate-100 shadow-xl overflow-hidden z-40"
+          >
+            <div className="flex flex-col px-6 py-6 gap-6">
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-lg font-bold tracking-wide text-slate-700 hover:text-[#6836E1] transition-colors"
+                >
+                  {item.label}
+                </Link>
+              ))}
+              
+              <div className="h-px w-full bg-slate-100 my-2" />
+              
+              <Link 
+                href="https://app.wyrefy.com/login" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-lg font-bold tracking-wide text-slate-700 hover:text-[#6836E1] transition-colors"
+              >
+                Login
+              </Link>
+              <Link
+                href="https://app.wyrefy.com/signup"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="w-full text-center px-6 py-4 rounded-xl text-base font-bold shadow-sm active:scale-95 transition-all duration-300 bg-slate-900 text-white hover:bg-[#6836E1]"
+              >
+                Book A Demo
+              </Link>
+            </div>
+          </motion.div>
         )}
-      </div>
-    </div>
+      </AnimatePresence>
+    </>
+    </LazyMotion>
   );
 }

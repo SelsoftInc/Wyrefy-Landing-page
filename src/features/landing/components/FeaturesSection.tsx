@@ -1,189 +1,228 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
-import Image from "next/image";
-import { CardSpotlight } from "@/src/components/ui/card-spotlight";
-import { Zap, Sparkles, MonitorPlay, MessageSquareText } from "lucide-react";
+import { LazyMotion, domAnimation, m as motion } from "motion/react";
+import { useState, useEffect } from "react";
+import { Zap, BrainCircuit, MessageSquare, MonitorPlay } from "lucide-react";
+import { BrandLogo } from "@/src/components/ui/brand-logo";
 
-const WavyLines = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 100 20" className={className} fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-    <path d="M0 5 Q 12.5 0, 25 5 T 50 5 T 75 5 T 100 5" stroke="currentColor" strokeWidth="0.5" strokeOpacity="0.4" />
-    <path d="M0 10 Q 12.5 5, 25 10 T 50 10 T 75 10 T 100 10" stroke="currentColor" strokeWidth="0.5" strokeOpacity="0.4" />
-    <path d="M0 15 Q 12.5 10, 25 15 T 50 15 T 75 15 T 100 15" stroke="currentColor" strokeWidth="0.5" strokeOpacity="0.4" />
-  </svg>
-);
-
-const features = [
+const FEATURES = [
   {
+    id: 1,
     title: "Lightning Fast Sandboxes",
+    badge: "Instant Setup",
     description: "Launch fully isolated, secure development environments in milliseconds. Zero local setup or configuration required.",
-    icon: <Zap size={22} className="text-blue-600" />,
-    image: "/Features/Card1.png"
+    icon: Zap,
+    color: "from-blue-500 to-cyan-400",
+    shadow: "shadow-cyan-500/50",
+    textColor: "text-blue-500",
   },
   {
+    id: 2,
     title: "Context-Aware AI Generation",
+    badge: "Figma Integrated",
     description: "Import your Figma designs instantly and let our AI build, edit, and refactor production-grade code that perfectly matches your specs.",
-    icon: <Sparkles size={22} className="text-blue-600" />,
-    image: "/Features/Card2.png"
+    icon: BrainCircuit,
+    color: "from-purple-500 to-fuchsia-500",
+    shadow: "shadow-fuchsia-500/50",
+    textColor: "text-purple-500",
   },
   {
+    id: 3,
     title: "Chat-Driven Iteration",
+    badge: "Chat Operations",
     description: "Direct the entire development process naturally. Just ask for changes in the chat and watch the interface update in real-time.",
-    icon: <MessageSquareText size={22} className="text-blue-600" />,
-    image: "/Features/Card3.png"
+    icon: MessageSquare,
+    color: "from-emerald-400 to-teal-500",
+    shadow: "shadow-teal-500/50",
+    textColor: "text-emerald-500",
   },
   {
+    id: 4,
     title: "Live Interactive Previews",
+    badge: "Secure Proxy",
     description: "See your changes immediately. Our secure proxy infrastructure ensures your preview is perfectly synced with every agent edit.",
-    icon: <MonitorPlay size={22} className="text-blue-600" />,
-    image: "/Features/Card4.png"
+    icon: MonitorPlay,
+    color: "from-orange-400 to-rose-500",
+    shadow: "shadow-rose-500/50",
+    textColor: "text-orange-500",
   }
 ];
 
 export function FeaturesSection() {
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-
-  const imgY = useTransform(scrollYProgress, [0, 1], [-200, 200]);
-  const imgRotate = useTransform(scrollYProgress, [0, 1], [-180, 180]);
-  const imgScale = useTransform(scrollYProgress, [0, 1], [0.8, 1.2]);
-  const imgXRight = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const [activeFeature, setActiveFeature] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
   
-  const imgY2 = useTransform(scrollYProgress, [0, 1], [150, -150]);
-  const imgRotate2 = useTransform(scrollYProgress, [0, 1], [180, -180]);
-  const imgScale2 = useTransform(scrollYProgress, [0, 1], [0.8, 1.2]);
-  const imgXLeft = useTransform(scrollYProgress, [0, 1], [-100, 100]);
+  // Auto-cycle through features if not hovering
+  useEffect(() => {
+    if (isHovered) return;
+    const interval = setInterval(() => {
+      setActiveFeature((prev) => (prev + 1) % FEATURES.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isHovered]);
 
   return (
-    <section ref={containerRef} className="bg-[#f8fafc] py-32 px-5 relative z-10 overflow-visible" id="features">
-      {/* Dynamic Wavy Glowing Background */}
-      <div className="absolute top-1/2 left-0 w-full h-[800px] -translate-y-1/2 pointer-events-none overflow-hidden opacity-60">
-        <div className="absolute top-1/2 left-[-10%] w-[120%] h-[800px] bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.08),transparent_60%)] transform -translate-y-1/2 -rotate-12"></div>
-        <div className="absolute top-[40%] left-[-10%] w-[120%] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.06),transparent_60%)] transform -translate-y-1/2 rotate-6"></div>
-      </div>
+    <LazyMotion features={domAnimation}>
+    <section className="w-full px-6 pt-16 pb-16 bg-slate-50 text-slate-800 overflow-hidden relative" id="features">
+      
+      {/* Background atmospheric glow */}
+      <div className="absolute top-1/2 left-[25%] -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-400/10 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Floating 3D Image Parallax - Top Right */}
-      <motion.div 
-        style={{ y: imgY, x: imgXRight, rotate: imgRotate, scale: imgScale }}
-        className="absolute right-0 top-[-5%] translate-x-[15%] md:translate-x-[20%] w-[180px] md:w-[250px] lg:w-[350px] opacity-20 pointer-events-none z-0"
-      >
-        <Image 
-          src="/3D_Element.png" 
-          alt="Floating 3D Element Top" 
-          fill
-          className="object-contain"
-          style={{ animation: 'spin 30s linear infinite' }}
-          unoptimized
-        />
-      </motion.div>
-
-      {/* Floating 3D Image Parallax - Bottom Left */}
-      <motion.div 
-        style={{ y: imgY2, x: imgXLeft, rotate: imgRotate2, scale: imgScale2 }}
-        className="absolute left-0 bottom-[-40%] translate-x-[-15%] md:translate-x-[-20%] w-[180px] md:w-[250px] lg:w-[350px] opacity-20 pointer-events-none z-0"
-      >
-        <Image 
-          src="/3D_Element.png" 
-          alt="Floating 3D Element Bottom" 
-          fill
-          className="object-contain"
-          style={{ animation: 'spin 40s linear infinite reverse' }}
-          unoptimized
-        />
-      </motion.div>
-
-      <div className="max-w-[1200px] mx-auto flex flex-col items-center relative z-10">
-        {/* Header */}
-        <motion.div 
-          className="text-center mb-24"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false }}
-        >
-          <div className="inline-flex items-center px-4 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/5 mb-6">
-            <span className="text-xs font-semibold text-blue-600 uppercase tracking-widest">Workspace Foundations</span>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-6">
-            Built around the way
-            <br />
-            Wyrefy projects move.
-          </h2>
-        </motion.div>
-
-        {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 w-full max-w-[1200px]">
-          {features.map((feature, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 50, scale: 0.95, filter: "blur(10px)" }}
-              whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-              viewport={{ once: false, margin: "-50px" }}
-              transition={{ delay: idx * 0.12, duration: 0.8, type: "spring", bounce: 0.3 }}
-              className={`will-change-transform ${idx === 0 || idx === 3 ? "md:col-span-2 lg:col-span-2" : "md:col-span-1 lg:col-span-1"}`}
+      <div className="w-full max-w-[1400px] mx-auto relative z-10">
+        
+        {/* Header grid matching the original content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mb-12 md:mb-16">
+          <div className="flex flex-col items-start">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight mb-6">
+              What is Wyrefy?
+            </h2>
+            <a
+              href="#pricing"
+              className="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest bg-slate-900 text-white hover:bg-slate-800 transition-all shadow-sm cursor-pointer no-underline"
             >
-              <CardSpotlight
-                radius={400}
-                color="rgba(59, 130, 246, 0.1)"
-                className="h-full relative rounded-2xl bg-gradient-to-br from-white to-blue-50/50 border border-blue-100 overflow-hidden group hover:border-blue-300 transition-all duration-500 shadow-[0_8px_32px_rgba(59,130,246,0.06)] hover:shadow-[0_8px_32px_rgba(59,130,246,0.12)] hover:-translate-y-1 hover:scale-[1.01]"
+              Explore now
+            </a>
+          </div>
+
+          <div className="flex justify-end md:pl-12">
+            <p className="text-lg md:text-xl font-medium text-slate-500 leading-relaxed max-w-lg">
+              Wyrefy is an autonomous AI workspace that turns Figma designs and project context into live, production-grade applications with zero local configuration.
+            </p>
+          </div>
+        </div>
+
+        {/* Layout Grid: Solar System (Left) & HUD Details (Right) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          
+          {/* LEFT: Solar System */}
+          <div 
+            className="relative w-full aspect-square md:aspect-[4/3] max-w-[400px] md:max-w-[600px] mx-auto flex items-center justify-center perspective-[1200px] @container"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            {/* Center Core: Wyrefy Engine (Flat, facing user) */}
+            <div className="absolute z-30 flex flex-col items-center justify-center pointer-events-none">
+              <BrandLogo className="w-20 h-20 md:w-32 md:h-32 text-blue-600 drop-shadow-xl" />
+            </div>
+
+            {/* 3D Tilted Orbital System */}
+            <div className="absolute inset-0 z-20 flex items-center justify-center" style={{ transform: "rotateX(70deg)", transformStyle: "preserve-3d" }}>
+              <motion.div 
+                className="relative w-full h-full"
+                animate={{ rotateZ: 360 }}
+                transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+                style={{ animationPlayState: isHovered ? 'paused' : 'running', transformStyle: "preserve-3d" }}
               >
-                {/* Background Image Element with Gradient Mask */}
-                <div 
-                  className={`absolute z-0 pointer-events-none transition-transform duration-700 ease-out group-hover:scale-105 opacity-60 ${
-                    idx === 0 || idx === 3 
-                      ? "top-0 right-0 h-full w-[60%] md:w-[50%]" 
-                      : "bottom-0 left-0 w-full h-[45%]"
-                  }`}
-                  style={{
-                    WebkitMaskImage: idx === 0 || idx === 3 
-                      ? "linear-gradient(to right, transparent, black 40%)" 
-                      : "linear-gradient(to bottom, transparent, black 70%)",
-                    maskImage: idx === 0 || idx === 3 
-                      ? "linear-gradient(to right, transparent, black 40%)" 
-                      : "linear-gradient(to bottom, transparent, black 70%)"
+                {FEATURES.map((feature, idx) => {
+                  const angle = (idx * 360) / FEATURES.length;
+                  const radiusPercent = 38; // 38% of container width
+                  const angleInRads = (angle * Math.PI) / 180;
+                  const x = radiusPercent * Math.sin(angleInRads);
+                  const y = -radiusPercent * Math.cos(angleInRads);
+                  
+                  return (
+                    <div 
+                      key={feature.id}
+                      className="absolute top-1/2 left-1/2"
+                      style={{
+                        transform: `translate(-50%, -50%) translate(calc(${x} * 1cqw), calc(${y} * 1cqw))`,
+                        transformStyle: "preserve-3d"
+                      }}
+                    >
+                      {/* Counter-rotation matches exact speed to keep the planet strictly upright along Z axis */}
+                      <motion.div
+                        animate={{ rotateZ: -360 }}
+                        transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+                        style={{ animationPlayState: isHovered ? 'paused' : 'running', transformStyle: "preserve-3d" }}
+                      >
+                        {/* Reverse the 70deg X tilt so the card stands completely straight facing the user */}
+                        <div style={{ transform: "rotateX(-70deg)" }}>
+                          {/* Interactive Planet Node */}
+                          <button
+                            type="button"
+                            aria-label={`Select ${feature.title}`}
+                            onMouseEnter={() => setActiveFeature(idx)}
+                            className={`relative group flex flex-col items-center justify-center p-2 md:p-4 transition-transform duration-300 ${
+                              activeFeature === idx ? 'scale-125' : 'scale-100 hover:scale-110'
+                            }`}
+                          >
+                            <feature.icon className={`w-7 h-7 md:w-10 md:h-10 relative z-10 transition-colors duration-300 ${activeFeature === idx ? feature.textColor : 'text-slate-400 group-hover:text-slate-800'}`} />
+                          </button>
+                        </div>
+                      </motion.div>
+                    </div>
+                  );
+                })}
+                
+                {/* Decorative Orbit Ring */}
+                <div className="absolute top-1/2 left-1/2 w-[76cqw] h-[76cqw] rounded-full border-2 border-blue-500/80 border-dashed pointer-events-none" style={{ transform: "translate(-50%, -50%)" }} />
+              </motion.div>
+            </div>
+
+          </div>
+
+          {/* RIGHT: Dynamic Active Details HUD */}
+          <div className="flex flex-col justify-center relative md:pl-12 mt-10 lg:mt-0">
+            <div className="relative h-[300px] w-full">
+              {FEATURES.map((feature, idx) => (
+                <motion.div
+                  key={feature.id}
+                  initial={{ opacity: 0, x: 20, filter: 'blur(10px)' }}
+                  animate={{ 
+                    opacity: activeFeature === idx ? 1 : 0, 
+                    x: activeFeature === idx ? 0 : -20,
+                    filter: activeFeature === idx ? 'blur(0px)' : 'blur(10px)',
+                    pointerEvents: activeFeature === idx ? 'auto' : 'none'
                   }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="absolute inset-0 flex flex-col justify-center"
                 >
-                  <Image 
-                    src={feature.image} 
-                    alt={feature.title} 
-                    fill
-                    className={idx === 0 || idx === 3 ? "object-cover object-left" : "object-cover object-top"} 
-                    unoptimized
-                  />
-                </div>
-
-                <div className={`p-8 flex h-full relative z-10 ${idx === 0 || idx === 3 ? "flex-col md:flex-row gap-8 w-full md:w-[60%]" : "flex-col"}`}>
-                  <div className="flex-1 flex flex-col">
-                    {/* Top Label & Waves */}
-                    <div>
-                      <WavyLines className="w-16 h-4 text-blue-500/10" />
-                    </div>
-
-                    {/* Content */}
-                    <h3 className={`font-medium text-slate-800 mt-6 mb-4 ${idx === 0 || idx === 3 ? "text-3xl" : "text-2xl"}`}>{feature.title}</h3>
-                    <p className={`text-slate-650 leading-relaxed flex-1 ${idx === 0 || idx === 3 ? "text-base mb-6 max-w-[90%]" : "text-sm mb-12"}`}>
-                      {feature.description}
-                    </p>
+                  <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 bg-white w-max mb-6 shadow-sm`}>
+                    <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${feature.color} ${feature.shadow}`} />
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-600">
+                      {feature.badge}
+                    </span>
                   </div>
+                  
+                  <h3 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 mb-6 leading-tight">
+                    {feature.title}
+                  </h3>
+                  
+                  <p className="text-base md:text-xl font-medium text-slate-500 leading-relaxed max-w-xl">
+                    {feature.description}
+                  </p>
 
-                  {/* Bottom Graphic & Icon */}
-                  <div className={`flex items-end ${idx === 0 || idx === 3 ? "justify-start items-center md:items-end w-full md:w-auto" : "justify-between mt-auto pt-8"}`}>
-                    {idx !== 0 && idx !== 3 && (
-                      <WavyLines className="w-32 h-6 text-blue-500/10" />
-                    )}
-                    <div className={`rounded-xl border border-blue-200/50 flex items-center justify-center bg-blue-50 shadow-[inset_0_0_15px_rgba(59,130,246,0.1)] group-hover:bg-blue-100/50 transition-all duration-500 group-hover:scale-110 backdrop-blur-sm ${idx === 0 || idx === 3 ? "w-16 h-16 shrink-0 mt-4 md:mt-0" : "w-12 h-12"}`}>
-                      {feature.icon}
-                    </div>
-                  </div>
-                </div>
-              </CardSpotlight>
-            </motion.div>
-          ))}
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Pagination / HUD Nav Tracker */}
+            <div className="mt-12 flex gap-4">
+              {FEATURES.map((feature, i) => (
+                <button 
+                  key={feature.id} 
+                  type="button"
+                  aria-label={`Go to feature ${i + 1}`}
+                  onClick={() => setActiveFeature(i)}
+                  className={`h-[4px] rounded-full overflow-hidden cursor-pointer transition-all duration-500 ease-out ${activeFeature === i ? 'w-16 bg-slate-300' : 'w-8 bg-slate-200 hover:bg-slate-300'}`}
+                >
+                  {activeFeature === i && (
+                    <motion.div 
+                      className="h-full bg-blue-500"
+                      initial={{ width: isHovered ? '100%' : '0%' }}
+                      animate={{ width: '100%' }}
+                      transition={{ duration: isHovered ? 0 : 4, ease: "linear" }}
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
+
+          </div>
+
         </div>
       </div>
     </section>
+    </LazyMotion>
   );
 }

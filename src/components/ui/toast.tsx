@@ -1,7 +1,7 @@
 "use client";
 
 import { X, CheckCircle2, AlertCircle, Info } from "lucide-react";
-import { createContext, use, useCallback, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 
 type ToastTone = "success" | "error" | "info";
 type ToastItem = {
@@ -92,10 +92,4 @@ export function ToastProvider({ children }: Readonly<{ children: React.ReactNode
       </div>
     </ToastContext.Provider>
   );
-}
-
-export function useToast() {
-  const context = use(ToastContext);
-  if (!context) throw new Error("useToast must be used inside ToastProvider");
-  return context;
 }
