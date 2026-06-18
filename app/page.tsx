@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { HeroSection } from "@/src/features/landing/components/HeroSection";
 import { FeaturesSection } from "@/src/features/landing/components/FeaturesSection";
 import { UseCasesSection } from "@/src/features/landing/components/UseCasesSection";
@@ -34,10 +35,6 @@ export default function Home() {
     }
   }, [ready]);
 
-  if (!ready) {
-    return <AppLoading />;
-  }
-
   function selectPlan(slug: string) {
     if (slug === "enterprise") {
       window.location.href = "/contact";
@@ -47,7 +44,11 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen relative bg-white text-slate-800 antialiased">
+    <div className="min-h-screen relative bg-white text-slate-800 antialiased overflow-x-hidden">
+      <AnimatePresence>
+        {!ready && <AppLoading key="app-loader" />}
+      </AnimatePresence>
+
       <style>{`
         :root {
           --bg: var(--background);
