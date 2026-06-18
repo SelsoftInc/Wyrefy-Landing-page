@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { slugify } from "@/src/shared/slugify";
+import { slugify } from "@/src/lib/slugify";
 
 describe("slugify", () => {
   it("converts whitespace and dashes into single separators", () => {

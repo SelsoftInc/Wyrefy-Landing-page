@@ -15,36 +15,11 @@ interface Plan {
 export function PricingSection({ onSelectPlan }: { onSelectPlan: (slug: string) => void }) {
   const plans: Plan[] = [
     {
-      name: "Starter",
-      slug: "starter",
-      price: "$0",
-      desc: "For individuals starting with Figma-assisted project generation.",
-      features: [
-        "Up to 1 active project",
-        "0.5 included credits monthly",
-        "Live frontend preview access",
-        "Isolated development sandbox"
-      ]
-    },
-    {
-      name: "Pro",
-      slug: "pro",
-      price: "$29",
-      desc: "For teams building more projects with larger credit pools.",
-      isFeatured: true,
-      features: [
-        "Up to 5 active projects",
-        "100 included credits monthly",
-        "Live frontend preview access",
-        "Organization-ready workspace",
-        "Shared folder structures"
-      ]
-    },
-    {
       name: "Enterprise",
       slug: "enterprise",
       price: "Custom",
       desc: "For organizations that need custom limits, support, and billing.",
+      isFeatured: true,
       features: [
         "Unlimited projects workspace",
         "Custom credit allocation",
@@ -71,7 +46,7 @@ export function PricingSection({ onSelectPlan }: { onSelectPlan: (slug: string) 
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-[1200px] mx-auto items-stretch">
+        <div className="grid grid-cols-1 gap-8 max-w-md mx-auto items-stretch">
           {plans.map((plan, idx) => (
             <motion.div
               key={plan.name}

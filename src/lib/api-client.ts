@@ -1,7 +1,7 @@
 "use client";
 
-export { API_BASE_URL } from "@/src/shared/api-config";
-import { API_BASE_URL } from "@/src/shared/api-config";
+export { API_BASE_URL } from "@/src/lib/api-config";
+import { API_BASE_URL } from "@/src/lib/api-config";
 
 type RequestOptions<TBody> = Omit<RequestInit, "body"> & {
   body?: TBody;

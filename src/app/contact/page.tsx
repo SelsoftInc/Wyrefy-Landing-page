@@ -33,7 +33,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-slate-900">Email us</h3>
-                    <a href="mailto:info@selsoftinc.com" className="font-semibold text-slate-500 hover:text-[#6836E1] transition-all duration-300">
+                    <a href="mailto:sibisbs5161@gmail.com" className="font-semibold text-slate-500 hover:text-[#6836E1] transition-all duration-300">
                       info@selsoftinc.com
                     </a>
                   </div>
@@ -46,7 +46,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-bold text-slate-900">Visit us</h3>
                     <p className="font-semibold text-slate-500">
-                      San Francisco, CA, USA
+                      303 S Jupiter Rd Suite 110<br />
+                      Allen TX 75002 USA
                     </p>
                   </div>
                 </div>
@@ -55,12 +56,13 @@ export default function ContactPage() {
 
             {/* Right Column - Contact Form */}
             <div className="relative z-10 rounded-[2.5rem] p-8 lg:p-10 bg-white border-2 border-slate-200 shadow-xl transition-all duration-300 hover:shadow-2xl hover:border-indigo-200">
-              <form className="space-y-6">
+              <form action="mailto:info@selsoftinc.com" method="post" encType="text/plain" className="space-y-6">
                 <div className="grid gap-6 md:grid-cols-2">
                   <div className="space-y-2">
                     <label htmlFor="name" className="text-sm font-bold text-slate-700 uppercase tracking-widest">Full Name</label>
                     <input
                       id="name"
+                      name="name"
                       type="text"
                       aria-label="Full Name"
                       placeholder="John Doe"
@@ -71,6 +73,7 @@ export default function ContactPage() {
                     <label htmlFor="email" className="text-sm font-bold text-slate-700 uppercase tracking-widest">Email Address</label>
                     <input
                       id="email"
+                      name="email"
                       type="email"
                       aria-label="Email Address"
                       placeholder="john@example.com"
@@ -84,6 +87,7 @@ export default function ContactPage() {
                   <div className="relative">
                     <select
                       id="subject"
+                      name="subject"
                       aria-label="Subject"
                       className="w-full appearance-none rounded-2xl border-2 border-slate-200 bg-slate-50 px-5 py-4 font-semibold text-slate-900 focus:border-[#6836E1] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#6836E1]/10 transition-all shadow-sm"
                     >
@@ -99,6 +103,7 @@ export default function ContactPage() {
                   <label htmlFor="message" className="text-sm font-bold text-slate-700 uppercase tracking-widest">Message</label>
                   <textarea
                     id="message"
+                    name="message"
                     rows={4}
                     aria-label="Message"
                     placeholder="How can we help you?"
@@ -107,7 +112,7 @@ export default function ContactPage() {
                 </div>
 
                 <button
-                  type="button"
+                  type="submit"
                   className="w-full mt-6 rounded-full bg-slate-900 px-6 py-5 text-sm uppercase tracking-widest font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:bg-[#6836E1] hover:shadow-[0_20px_40px_rgba(104,54,225,0.25)] active:scale-95"
                 >
                   Send Message

@@ -50,9 +50,9 @@ export function Footer() {
             
             <div className="flex flex-col gap-3">
               <h3 className="text-xs font-bold text-slate-800 mb-2 uppercase tracking-widest">Company</h3>
-              <Link href="#" className="text-sm font-semibold text-slate-500 no-underline hover:text-[#6836E1] hover:-translate-y-0.5 hover:scale-105 transition-all duration-300 origin-left inline-block w-fit">About</Link>
-              <Link href="#" className="text-sm font-semibold text-slate-500 no-underline hover:text-[#6836E1] hover:-translate-y-0.5 hover:scale-105 transition-all duration-300 origin-left inline-block w-fit">Careers</Link>
-              <Link href="/contact" className="text-sm font-semibold text-slate-500 no-underline hover:text-[#6836E1] hover:-translate-y-0.5 hover:scale-105 transition-all duration-300 origin-left inline-block w-fit">Contact</Link>
+              <Link href="https://selsoftinc.com/about" className="text-sm font-semibold text-slate-500 no-underline hover:text-[#6836E1] hover:-translate-y-0.5 hover:scale-105 transition-all duration-300 origin-left inline-block w-fit">About</Link>
+              <Link href="https://selsoftinc.com/careers" className="text-sm font-semibold text-slate-500 no-underline hover:text-[#6836E1] hover:-translate-y-0.5 hover:scale-105 transition-all duration-300 origin-left inline-block w-fit">Careers</Link>
+              <Link href="https://selsoftinc.com/contact" className="text-sm font-semibold text-slate-500 no-underline hover:text-[#6836E1] hover:-translate-y-0.5 hover:scale-105 transition-all duration-300 origin-left inline-block w-fit">Contact</Link>
             </div>
             
             <div className="flex flex-col gap-3">

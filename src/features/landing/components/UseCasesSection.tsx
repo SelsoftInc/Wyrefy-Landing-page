@@ -65,8 +65,8 @@ const steps = [
 const VB_W = 750;
 const VB_H = 800;   // Increased significantly to give all cards vertical breathing room
 const CW   = 150;
-const CH   = 55;
-const EXP  = 110;
+const CH   = 75;
+const EXP  = 130;
 
 // Card centres — spaced to ensure no overlap when fully expanded
 const C = [
@@ -108,7 +108,8 @@ function buildPaths(active: number) {
   const p0 = `M ${o1r.x} ${o1r.y} C ${o1r.x+60} ${o1r.y}, ${o2l.x-60} ${o2l.y}, ${o2l.x} ${o2l.y}`;
   const p1 = `M ${o1r.x} ${o1r.y} C ${o1r.x+60} ${o1r.y}, ${o3l.x-60} ${o3l.y}, ${o3l.x} ${o3l.y}`;
   const p2 = `M ${o2r.x} ${o2r.y} C ${o2r.x+60} ${o2r.y}, ${o3r.x+60} ${o3r.y}, ${o3r.x} ${o3r.y}`;
-  const p3 = `M ${o3b.x} ${o3b.y} C ${o3b.x} ${o3b.y+80}, ${o4t.x} ${o4t.y-80}, ${o4t.x} ${o4t.y}`;
+  const dy3 = Math.min(80, Math.max(20, (o4t.y - o3b.y) / 2));
+  const p3 = `M ${o3b.x} ${o3b.y} C ${o3b.x} ${o3b.y+dy3}, ${o4t.x} ${o4t.y-dy3}, ${o4t.x} ${o4t.y}`;
 
   // All anchor dots (start + end of each path)
   const anchors = [
@@ -148,6 +149,7 @@ function FlowCard({
         left:   `${leftPct}%`,
         top:    `${topPct}%`,
         width:  `${wPct}%`,
+        height: `${hPct}%`,
       }}
     >
       <div
@@ -268,7 +270,7 @@ export function UseCasesSection() {
               <svg
                 className="absolute inset-0 w-full h-full pointer-events-none"
                 viewBox={`0 0 ${VB_W} ${VB_H}`}
-                preserveAspectRatio="xMidYMid meet"
+                preserveAspectRatio="none"
                 overflow="visible"
               >
                 <defs>
