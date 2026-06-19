@@ -103,7 +103,6 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-scroll-behavior="smooth"
       suppressHydrationWarning
       className={`min-h-full antialiased ${inter.variable} ${outfit.variable} ${spaceGrotesk.variable}`}
     >

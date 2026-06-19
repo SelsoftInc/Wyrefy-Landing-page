@@ -4,9 +4,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { initializeTheme } from "@/src/features/theme/store";
 import { ToastProvider } from "@/src/components/ui/toast";
-import { SmoothScroll } from "@/src/components/ui/SmoothScroll";
-
-
 export function AppProviders({ children }: Readonly<{ children: React.ReactNode }>) {
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: {
@@ -26,9 +23,7 @@ export function AppProviders({ children }: Readonly<{ children: React.ReactNode 
   return (
     <QueryClientProvider client={queryClient}>
       <ToastProvider>
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
+        {children}
       </ToastProvider>
     </QueryClientProvider>
   );

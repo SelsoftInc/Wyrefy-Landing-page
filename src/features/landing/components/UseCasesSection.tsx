@@ -2,125 +2,11 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { FolderPlus, UploadCloud, Bot, MonitorPlay } from "lucide-react";
+
 import { LazyMotion, domAnimation, m as motion } from "motion/react";
 
-/* ─────────────── Tech stack data ─────────────── */
-const techStack = [
-  { name: "Figma",   iconSrc: "/features_icon/figma.svg"   },
-  { name: "Next.js", iconSrc: "/features_icon/nextjs.svg"  },
-  { name: "React",   iconSrc: "/features_icon/react.svg"   },
-  { name: "Angular", iconSrc: "/features_icon/angular.svg" },
-  { name: "Vue",     iconSrc: "/features_icon/vue-js.svg"  },
-] as const;
-
-/* ─────────────── Step data ─────────────── */
-const steps = [
-  {
-    num: "01", title: "Open a Project",
-    desc: "Create or select a project workspace where development begins.",
-    icon: <FolderPlus  className="w-5 h-5" />,
-    iconBg: "bg-[#00C3FF]/10 text-[#00C3FF] border-[#00C3FF]/30",
-    accent: "#00C3FF", glow: "rgba(0,195,255,0.3)",
-    imageSrc: "/process/image1.png",
-  },
-  {
-    num: "02", title: "Import Context",
-    desc: "Upload designs, requirements, documentation, repositories, and assets.",
-    icon: <UploadCloud className="w-5 h-5" />,
-    iconBg: "bg-[#A200FF]/10 text-[#A200FF] border-[#A200FF]/30",
-    accent: "#A200FF", glow: "rgba(162,0,255,0.3)",
-    imageSrc: "/process/image2.png",
-  },
-  {
-    num: "03", title: "Iterate in Chat",
-    desc: "Collaborate with AI agents through natural language conversations.",
-    icon: <Bot         className="w-5 h-5" />,
-    iconBg: "bg-[#FF007F]/10 text-[#FF007F] border-[#FF007F]/30",
-    accent: "#FF007F", glow: "rgba(255,0,127,0.3)",
-    imageSrc: "/process/image3.png",
-  },
-  {
-    num: "04", title: "Review Live Preview",
-    desc: "Instantly inspect and validate the running application without leaving the workspace.",
-    icon: <MonitorPlay className="w-5 h-5" />,
-    iconBg: "bg-[#00E676]/10 text-[#00E676] border-[#00E676]/30",
-    accent: "#00E676", glow: "rgba(0,230,118,0.3)",
-    imageSrc: "/process/image4.png",
-  },
-];
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   SVG coordinate system  →  viewBox "0 0 1000 680"
-   Card half-dims: CW=120 (width), CH=50 (height, inactive)
-   EXP = extra height in VB units added when active
-
-   Layout (matches reference):
-     01  cx=170  cy=245   ← vertically centered between 02 and 03
-     02  cx=530  cy= 90   ← top right
-     03  cx=530  cy=400   ← mid right (310 units below 02)
-     04  cx=350  cy=720   ← bottom middle (320 units below 03)
-───────────────────────────────────────────────────────────────────────────── */
-
-const VB_W = 750;
-const VB_H = 800;   // Increased significantly to give all cards vertical breathing room
-const CW   = 150;
-const CH   = 75;
-const EXP  = 130;
-
-// Card centres — spaced to ensure no overlap when fully expanded
-const C = [
-  { cx: 170, cy: 245 },   // 01 – vertically centered between 02 and 03
-  { cx: 530, cy:  90 },   // 02 – top right
-  { cx: 530, cy: 400 },   // 03 – mid right     (310 units below 02)
-  { cx: 350, cy: 720 },   // 04 – bottom middle (320 units below 03)
-];
-
-// Which path is lit for which activeStep
-const PATH_ACTIVE_MAP = [
-  (a: number) => a === 0 || a === 1, // p0  01→02
-  (a: number) => a === 0 || a === 2, // p1  01→03
-  (a: number) => a === 1 || a === 2, // p2  02→03 loop
-  (a: number) => a === 2 || a === 3, // p3  03→04
-];
-
-// Gradient colour pairs per path
-const PATH_GRAD = [
-  ["#00C3FF", "#A200FF"],   // p0 cyan→purple
-  ["#00C3FF", "#FF007F"],   // p1 cyan→pink
-  ["#A200FF", "#FF007F"],   // p2 purple loop to pink
-  ["#FF007F", "#00E676"],   // p3 pink→green
-];
-
-function buildPaths(active: number) {
-  // bottom y of card 03 – moves down when it's active
-  const c3bot = C[2].cy + CH + (active === 2 ? EXP : 0);
-
-  // Connection coordinates (y shifts down by EXP/2 when active to stay vertically centered)
-  const o1r  = { x: C[0].cx + CW, y: C[0].cy + (active === 0 ? EXP / 2 : 0) };   // 01 right
-  const o2l  = { x: C[1].cx - CW, y: C[1].cy + (active === 1 ? EXP / 2 : 0) };   // 02 left
-  const o2r  = { x: C[1].cx + CW, y: C[1].cy + (active === 1 ? EXP / 2 : 0) };   // 02 right
-  const o3l  = { x: C[2].cx - CW, y: C[2].cy + (active === 2 ? EXP / 2 : 0) };   // 03 left
-  const o3r  = { x: C[2].cx + CW, y: C[2].cy + (active === 2 ? EXP / 2 : 0) };   // 03 right
-  const o3b  = { x: C[2].cx,      y: c3bot    };   // 03 bottom (dynamic)
-  const o4t  = { x: C[3].cx,      y: C[3].cy - CH };// 04 top (top edge never shifts)
-
-  const p0 = `M ${o1r.x} ${o1r.y} C ${o1r.x+60} ${o1r.y}, ${o2l.x-60} ${o2l.y}, ${o2l.x} ${o2l.y}`;
-  const p1 = `M ${o1r.x} ${o1r.y} C ${o1r.x+60} ${o1r.y}, ${o3l.x-60} ${o3l.y}, ${o3l.x} ${o3l.y}`;
-  const p2 = `M ${o2r.x} ${o2r.y} C ${o2r.x+60} ${o2r.y}, ${o3r.x+60} ${o3r.y}, ${o3r.x} ${o3r.y}`;
-  const dy3 = Math.min(80, Math.max(20, (o4t.y - o3b.y) / 2));
-  const p3 = `M ${o3b.x} ${o3b.y} C ${o3b.x} ${o3b.y+dy3}, ${o4t.x} ${o4t.y-dy3}, ${o4t.x} ${o4t.y}`;
-
-  // All anchor dots (start + end of each path)
-  const anchors = [
-    o1r, o2l,   // p0
-    o1r, o3l,   // p1  (o1r duplicates – both draw at same spot, looks like one dot)
-    o2r, o3r,   // p2
-    o3b, o4t,   // p3
-  ];
-
-  return { paths: [p0, p1, p2, p3], anchors };
-}
+import { techStack, steps } from "../utils/useCasesData";
+import { VB_W, VB_H, CW, CH, EXP, C, PATH_ACTIVE_MAP, PATH_GRAD, buildPaths } from "../utils/useCasesMath";
 
 /* ─────────────── Card component ─────────────── */
 function FlowCard({
@@ -283,10 +169,6 @@ export function UseCasesSection() {
                 overflow="visible"
               >
                 <defs>
-                  <filter id="glow2" x="-30%" y="-30%" width="160%" height="160%">
-                    <feGaussianBlur stdDeviation="4" result="b"/>
-                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                  </filter>
                   {PATH_GRAD.map(([c1, c2], i) => (
                     <linearGradient key={i} id={`pg2-${i}`} x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%"   stopColor={c1}/>
@@ -307,7 +189,6 @@ export function UseCasesSection() {
                       strokeWidth={pathActive[i] ? 3 : 1.5}
                       strokeDasharray={pathActive[i] ? "8 5" : "4 6"}
                       strokeLinecap="round" fill="none"
-                      filter={pathActive[i] ? "url(#glow2)" : "none"}
                       className={`transition-all duration-500 ${pathActive[i] ? "dash-active" : "dash-inactive"}`}
                       style={{ opacity: pathActive[i] ? 1 : 0.35 }}
                     />
@@ -414,22 +295,56 @@ export function UseCasesSection() {
 
           {/* ── Mobile Stack ── */}
           <div className="flex lg:hidden flex-col gap-5 mt-4 max-w-md mx-auto w-full">
-            {steps.map((step, idx) => (
-              <motion.div key={step.num}
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ delay: idx * 0.08, duration: 0.4 }}
-                className="w-full rounded-2xl bg-gradient-to-br from-[#FAF9FD] to-[#F1EEFC]/30 border border-slate-200 p-5 shadow-sm"
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${step.iconBg}`}>{step.icon}</div>
-                  <div>
-                    <span className="block text-[10px] font-black tracking-wider text-slate-400">{step.num}</span>
-                    <h3 className="text-sm font-extrabold text-slate-900 tracking-tight">{step.title}</h3>
+            {steps.map((step, idx) => {
+              const isActive = activeStep === idx;
+              return (
+                <motion.div key={step.num}
+                  initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }} transition={{ delay: idx * 0.08, duration: 0.4 }}
+                  onClick={() => {
+                    if (intervalRef.current) clearInterval(intervalRef.current);
+                    setActiveStep(idx);
+                  }}
+                  className="w-full rounded-2xl bg-gradient-to-br from-[#FAF9FD] to-[#F1EEFC]/30 border p-5 transition-all duration-500 overflow-hidden cursor-pointer"
+                  style={{
+                    borderColor: isActive ? step.accent : "#E2E8F0",
+                    boxShadow: isActive ? `0 12px 30px -10px ${step.glow}` : "0 1px 2px rgba(0,0,0,0.05)",
+                    transform: isActive ? "scale(1.02)" : "scale(1)"
+                  }}
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-500 ${isActive ? step.iconBg : 'bg-slate-100 text-slate-400 border border-slate-200'}`}>
+                      {step.icon}
+                    </div>
+                    <div>
+                      <span className="block text-[10px] font-black tracking-wider transition-colors duration-500" style={{ color: isActive ? step.accent : '#94a3b8' }}>
+                        STEP {step.num}
+                      </span>
+                      <h3 className="text-sm font-extrabold text-slate-900 tracking-tight">{step.title}</h3>
+                    </div>
                   </div>
-                </div>
-                <p className="text-xs font-semibold text-slate-500 leading-relaxed">{step.desc}</p>
-              </motion.div>
-            ))}
+                  <p className="text-xs font-semibold text-slate-500 leading-relaxed">{step.desc}</p>
+                  
+                  {/* Expanding Image Reveal for Mobile */}
+                  <motion.div
+                    initial={false}
+                    animate={{ height: isActive ? "auto" : 0, opacity: isActive ? 1 : 0, marginTop: isActive ? 16 : 0 }}
+                    transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                    className="w-full relative rounded-xl overflow-hidden shadow-inner border border-slate-100/50"
+                  >
+                    <div className="w-full aspect-[16/9] relative bg-slate-50">
+                      <Image
+                        src={step.imageSrc}
+                        alt={step.title}
+                        fill
+                        className="object-cover object-top"
+                        unoptimized
+                      />
+                    </div>
+                  </motion.div>
+                </motion.div>
+              );
+            })}
           </div>
 
         </div>

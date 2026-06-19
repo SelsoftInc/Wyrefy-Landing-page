@@ -167,11 +167,10 @@ export function FeaturesSection() {
               {FEATURES.map((feature, idx) => (
                 <motion.div
                   key={feature.id}
-                  initial={{ opacity: 0, x: 20, filter: 'blur(10px)' }}
+                  initial={{ opacity: 0, x: 20 }}
                   animate={{ 
                     opacity: activeFeature === idx ? 1 : 0, 
                     x: activeFeature === idx ? 0 : -20,
-                    filter: activeFeature === idx ? 'blur(0px)' : 'blur(10px)',
                     pointerEvents: activeFeature === idx ? 'auto' : 'none'
                   }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
