@@ -14,7 +14,8 @@ export function ContactForm() {
     setStatus("idle");
     setErrorMessage("");
 
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     const data = {
       name: formData.get("name"),
       email: formData.get("email"),
@@ -37,7 +38,7 @@ export function ContactForm() {
       }
 
       setStatus("success");
-      e.currentTarget.reset();
+      form.reset();
     } catch (error: any) {
       console.error(error);
       setStatus("error");
